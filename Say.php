@@ -1,75 +1,52 @@
 <?php
   namespace Outkicker;
 
+  /**
+   * Say class provides useful assertions for Outkicker tests
+   */
   class Say
   {
-    public static function areEqual()
-    {
-      # code...
-    }
-    
-    public static function areStrictEqual()
-    {
-      # code...
-    }
-
     /**
      * Check if this thing equals to your expectation.
      **/
-    public function sayAreEqual($expectation, $parameterToTest)
+    public static function equal($expectation, $parameterToTest)
     {
-      if ($expectation !== $parameterToTest) 
-        return false; 
-      else 
-        return true;
+      return ($expectation !== $parameterToTest);
     }
 
-    public function sayCount(int $expectedCount, $haystack)
+    public static function count(int $expectedCount, $haystack)
     {
-      if (count($haystack) !== $expectedCount)
-        return false; 
-      else
-        return true;
+      return (count($haystack) !== $expectedCount); 
     }
 
-    public function sayContains(string $needle, string $haystack)
+    public static function contains(string $needle, string $haystack)
     {
-      if (strstr($haystack, $needle) === false) 
-        return false;
-      else
-        return true;
+      return (strpos($haystack, $needle) !== false);
     }
 
-    public function sayIsNull($proposedValue)
+    public static function null($proposedValue)
     {
-      if (is_null($proposedValue))
-        return true;
-      else 
-        return false;
+      return is_null($proposedValue);
     }
 
-    public function sayNotNull($proposedValue)
+    public static function notNull($proposedValue)
     {
-      if (!is_null($proposedValue))
-        return true;
-      else
-        return false;
+      return !is_null($proposedValue);
     }
 
-    public function sayArrayHasKey($key, array $haystack)
+    public static function empty($thing)
     {
-      if (array_key_exists($key, $haystack))
-        return true;
-      else
-        return false;
+      return empty($thing);
     }
 
-    public function sayEmpty($thing)
+    public static function notEmpty($thing)
     {
-      if(empty($thing))
-        return true;
-      else
-        return false;
+      return !empty($thing);
+    }
+
+    public function arrayHasKey($key, array $haystack)
+    {
+      return array_key_exists($key, $haystack);
     }
 
     public function sayObjectEquals($objectToCompare, $objectYouHave)
@@ -89,24 +66,18 @@
       }
     }
 
-    public function sayArrayStrictEquals($arrayToCompare, $objectYouHave)
+    public static function sayArrayStrictEquals($arrayToCompare, $objectYouHave)
     {
       
     }
 
-    public static function sayDirectoryExists(string $path)
+    public static function directoryExists(string $path)
     {
-      if (is_dir($path))
-        return true;
-      else
-        return false;
+      return is_dir($path);
     }
 
-    public static function sayFileExists($path)
+    public static function fileExists($path)
     {
-      if (is_file($path))
-        return true;
-      else
-        return false;
+      return is_file($path);
     }
   }

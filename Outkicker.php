@@ -1,4 +1,6 @@
 <?php
+  namespace Outkicker;
+
   /**
    *  A simple test library developed for writing better tests on Outsights ecosystem
    */
@@ -37,12 +39,7 @@
     {
       return $this->failureCount;
     }
-
-    /**
-     * 
-     *
-     * @return void
-     */
+    
     public function getResultString()
     {
       return 
