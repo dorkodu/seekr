@@ -12,7 +12,7 @@
       protected $_test = null;
       protected $_exception = null;
 
-      public function getSuccess()
+      public function isSuccess()
       {
           return $this->_isSuccess;
       }

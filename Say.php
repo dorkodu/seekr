@@ -11,22 +11,27 @@
      **/
     public static function equal($expectation, $parameterToTest)
     {
-      return ($expectation !== $parameterToTest);
+      if ($expectation !== $parameterToTest)
+      throw new \Exception("SAY : Not Equal");
+      
     }
 
     public static function count(int $expectedCount, $haystack)
     {
-      return (count($haystack) !== $expectedCount); 
+      if (count($haystack) !== $expectedCount)
+      throw new \Exception("SAY : Count Does Not Match");
     }
 
     public static function contains(string $needle, string $haystack)
     {
-      return (strpos($haystack, $needle) !== false);
+      if (strpos($haystack, $needle) === false)
+      throw new \Exception("SAY : Not Contains");
     }
 
     public static function null($proposedValue)
     {
-      return is_null($proposedValue);
+      if(!is_null($proposedValue))
+      throw new \Exception("SAY : Not Contains");
     }
 
     public static function notNull($proposedValue)

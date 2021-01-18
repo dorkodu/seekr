@@ -15,15 +15,15 @@
         /**
          * This test is designed to fail
          **/
-        public function TestOne()
+        public function testOne()
         {
-            Say::equal( 1, 2 );
+            Say::equal( 2, 2 );
         }
 
         /**
          * This test is designed to succeed
          **/
-        public function TestTwo()
+        public function testTwo()
         {
             Say::equal( 1, 1 );
         }

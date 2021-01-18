@@ -3,30 +3,29 @@
 
   /**
    *  A simple test library developed for writing better tests on Outsights ecosystem
-   *  Outkicker provides
+   *  Outkicker provides a testable interface for a class
    */
   abstract class Outkicker
   {
-    protected $test_log = array();
+    protected $testLog = array();
 
     /**
      * Logs the result of a test. keeps track of results for later inspection, Overridable to log elsewhere.
      **/
     protected function log(TestResult $result)
     {
-        $this->test_log[] = $result;
+        $this->testLog[] = $result;
 
-        printf( "Test: %s was a %s %s\n"
+        printf( "Outkicker > %s was a %s %s\n"
             ,$result->getName()
-            ,$result->getSuccess() ? 'success' : 'failure'
-            ,$result->getSuccess() ? '' : sprintf( "\n%s (lines:%d-%d; file:%s)"
+            ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
+            ,$result->isSuccess() ? '' : sprintf( "\nComment : \n%s \n(Lines: %d-%d ~ File: %s)\n"
                 ,$result->getComment()
                 ,$result->getTest()->getStartLine()
                 ,$result->getTest()->getEndLine()
                 ,$result->getTest()->getFileName()
                 )
             );
-
     }
 
     public final function runTests()
@@ -49,6 +48,18 @@
           $output = ob_get_clean();
           $result->setOutput( $output );
           $this->log( $result );
+        }
+      }
+    }
+
+    public function logSummary()
+    {
+      $successCount = 0;
+      $failureCount = 0;
+
+      foreach ($this->testLog as $logEntry) {
+        if () {
+          # code...
         }
       }
     }
