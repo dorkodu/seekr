@@ -11,6 +11,8 @@
   {
     protected $testClassName = "";
     protected $testLog = array();
+    protected $_successCount = 0;
+    protected $_failureCount = 0;
 
     /**
      * Logs the result of a test. keeps track of results for later inspection, Overridable to log elsewhere.

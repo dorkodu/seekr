@@ -1,7 +1,7 @@
 <?php
-    require __DIR__ . '/Outkicker.php';
-    require __DIR__ . '/TestResult.php';
-    require __DIR__ . '/Say.php';
+    require __DIR__ . '/source/Outkicker.php';
+    require __DIR__ . '/source/TestResult.php';
+    require __DIR__ . '/source/Say.php';
     
     use Outkicker\Outkicker;
     use Outkicker\Say;
