@@ -68,7 +68,7 @@
           return $result;
       }
 
-      public static function createSuccess(Outkicker $object, \ReflectionMethod $test)
+      public static function createSuccess( Outkicker $object, \ReflectionMethod $test )
       {
           $result = new self();
           $result->_isSuccess = true;

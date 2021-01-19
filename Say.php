@@ -12,7 +12,7 @@
     public static function equal($expectation, $parameterToTest)
     {
       if ($expectation !== $parameterToTest)
-      throw new \Exception("SAY : Not Equal");
+      throw new \Exception("SAY · Not Equal");
       
     }
 
