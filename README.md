@@ -1,5 +1,13 @@
 # Outkicker
-Outkicker is a simple test library developed for writing better tests on Outsights ecosystem. <br>It is independent from Outsights, so anyone can use it in their PHP code.
+## What?
+
+Outkicker is a simple test library developed for writing better tests on Outsights ecosystem. <br>It is independent from Outsights, so anyone can use it in their code.
+
+## Why?
+
+Because I found TDD a little hard. Behavior Driven Development sound much easier and made sense to me. So, instead of spending days to figure out how to write tests, how to integrate them with my existing code, how to set up a "build pipeline" ; I created a simple and minimalistic PHP testing library to write more accurate, efficient tests in my code.
+
+## How?
 
 ### **It has a few components :**
 
