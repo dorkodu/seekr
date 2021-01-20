@@ -1,11 +1,31 @@
 <?php
   namespace Outkicker;
 
+  use Outkicker\Constraint;
+
   /**
    * Say class provides useful assertions for Outkicker tests
    */
   class Say
   {
+    public function letsSay()
+    {
+      
+    }
+
+    /**
+     * Evaluates a PHPUnit\Framework\Constraint matcher object.
+     *
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ExpectationFailedException
+     */
+    public static function assertThat($value, Constraint $constraint, string $message = ''): void
+    {
+        self::$count += count($constraint);
+
+        $constraint->evaluate($value, $message);
+    }
+
     /**
      * Check if this thing equals to your expectation.
      **/
