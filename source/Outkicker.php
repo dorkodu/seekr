@@ -14,6 +14,16 @@
     protected $_successCount = 0;
     protected $_failureCount = 0;
 
+    public function getSuccessCount()
+    {
+      return $this->_successCount;
+    }
+
+    public function getFailureCount()
+    {
+      return $this->_failureCount;
+    }
+
     /**
      * Logs the result of a test. keeps track of results for later inspection, Overridable to log elsewhere.
      **/
@@ -67,20 +77,17 @@
 
     public final function logSummary()
     {
-      $successCount = 0;
-      $failureCount = 0;
-
       foreach ($this->testLog as $logEntry) {
         if ($logEntry->isSuccess()) 
-          ++$successCount;
+          ++$this->_successCount;
         else
-          ++$failureCount;
+          ++$this->_failureCount;
       }
 
       printf( "Outkicker > SUMMARY %s : %d Success %d Failed\n"
             ,$this->testClassName
-            ,$successCount
-            ,$failureCount
+            ,$this->_successCount
+            ,$this->_failureCount
           );
 
     }
