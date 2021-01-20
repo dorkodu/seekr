@@ -11,6 +11,7 @@
   {
     protected $testClassName = "";
     protected $testLog = array();
+
     protected $_successCount = 0;
     protected $_failureCount = 0;
 
@@ -30,7 +31,10 @@
     protected final function logTest(TestResult $result)
     {
       $this->testLog[] = $result;
+    }
 
+    public function outputTestResult(TestResult $result)
+    {
       printf( "Outkicker > %s.%s was a %s %s %s\n"
         ,$this->testClassName
         ,$result->getName()
@@ -45,6 +49,13 @@
             ,$result->getTest()->getFileName()
             )
         );
+    }
+
+    public function outputTestLog()
+    {
+      foreach ($this->testLog as $testResult) {
+        
+      }
     }
 
     public final function runTests()

@@ -6,75 +6,75 @@
    **/
   class TestResult
   {
-      protected $_testableInstance = null;
-      protected $_isSuccess = false;
-      protected $_output = '';
-      protected $_test = null;
-      protected $_exception = null;
+    protected $_testableInstance = null;
+    protected $_isSuccess = false;
+    protected $_output = '';
+    protected $_test = null;
+    protected $_exception = null;
 
-      public function isSuccess()
+    public function isSuccess()
+    {
+      return $this->_isSuccess;
+    }
+    
+    public function getOutput()
+    {
+      return $this->_output;
+    }
+
+    public function setOutput( string $value )
+    {
+      $this->_output = $value;
+    }
+
+    public function getTest()
+    {
+      return $this->_test;
+    }
+
+    public function getName()
+    {
+      return $this->_test->getName();
+    }
+
+    public function getComment()
+    {
+      return $this->parseComment( $this->_test->getDocComment() );
+    }
+
+    private function parseComment($comment)
+    {
+      $lines = explode( "\n", $comment );
+      for( $i = 0; $i < count( $lines ); $i ++ )
       {
-          return $this->_isSuccess;
+          $lines[$i] = trim( $lines[ $i ] );
       }
-      
-      public function getOutput()
-      {
-          return $this->_output;
-      }
+      return implode( "\n", $lines );
+    }
 
-      public function setOutput( $value )
-      {
-          $this->_output = $value;
-      }
+    public function getException()
+    {
+      return $this->_exception;
+    }
 
-      public function getTest()
-      {
-          return $this->_test;
-      }
+    public static function createFailure( Outkicker $object, \ReflectionMethod $test, \Exception $exception )
+    {
+      $result = new self();
+      $result->_isSuccess = false;
+      $result->testableInstance = $object;
+      $result->_test = $test;
+      $result->_exception = $exception;
 
-      public function getName()
-      {
-          return $this->_test->getName();
-      }
+      return $result;
+    }
 
-      public function getComment()
-      {
-          return $this->parseComment( $this->_test->getDocComment() );
-      }
+    public static function createSuccess( Outkicker $object, \ReflectionMethod $test )
+    {
+      $result = new self();
+      $result->_isSuccess = true;
+      $result->testableInstance = $object;
+      $result->_test = $test;
 
-      private function parseComment($comment)
-      {
-          $lines = explode( "\n", $comment );
-          for( $i = 0; $i < count( $lines ); $i ++ )
-          {
-              $lines[$i] = trim( $lines[ $i ] );
-          }
-          return implode( "\n", $lines );
-      }
-
-      public function getException()
-      {
-          return $this->_exception;
-      }
-
-      public static function createFailure( Outkicker $object, \ReflectionMethod $test, \Exception $exception )
-      {
-          $result = new self();
-          $result->_isSuccess = false;
-          $result->testableInstance = $object;
-          $result->_test = $test;
-          $result->_exception = $exception;
-
-          return $result;
-      }
-
-      public static function createSuccess( Outkicker $object, \ReflectionMethod $test )
-      {
-          $result = new self();
-          $result->_isSuccess = true;
-          $result->testableInstance = $object;
-          $result->_test = $test;
-
-          return $result;
-      }
-  }
+      return $result;
+    }
+}
