@@ -41,10 +41,14 @@
         $resultException = $result->getException();
         
         if ($resultException instanceof Contradiction) {
-          $exceptionOutput = $resultException->toString();
+          $exceptionMessage = $resultException->toString();
         } else {
-          $exceptionOutput = sprintf( "\nException : %s", $resultException->getMessage() );
+          $exceptionMessage = sprintf( "\nException : %s", $resultException->getMessage() );
         }
+
+        $testOutput = sprintf("Output :\n%s",
+          empty($result->getOutput()) ? $result->getOutput() : ''
+        );
 
         $exceptionMetadata = sprintf( "\nComment : \n%s \n(Lines: %d-%d ~ File: %s)\n"
             ,$result->getComment()
@@ -52,14 +56,19 @@
             ,$result->getTest()->getEndLine()
             ,$result->getTest()->getFileName()
         );
+
+        $exceptionOutput = sprintf("%s%s%s"
+                            ,$exceptionMetadata
+                            ,$exceptionMessage
+                            ,$testOutput
+                          );
       }
 
       # returns the error log
-      return sprintf( "Outkicker > %s.%s() was a %s \n%s \n%s\n"
+      return sprintf( "Outkicker > %s.%s() was a %s \n%s\n"
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
-        ,$result->getOutput()
         ,$exceptionOutput
         );
     }
