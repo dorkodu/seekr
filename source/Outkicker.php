@@ -33,35 +33,41 @@
       $this->testLog[] = $result;
     }
 
-    public function outputTestResult(TestResult $result)
+    public function serializeTestResult(TestResult $result)
     {
       $exceptionOutput = "";
 
-      if ($result->getException() instanceof Contradiction) {
+      if (!$result->isSuccess()) {
+        $resultException = $result->getException();
+        
+        if ($resultException instanceof Contradiction) {
+          $exceptionOutput = $resultException->toString();
+        } else {
+          $exceptionOutput = sprintf( "\nException : %s"
+          ,$result->getException()->getMessage() );
+        }
 
-      }
-      sprintf( "\nException : %s"
-            ,$result->getException()->getMessage()
-    );
-
-      printf( "Outkicker > %s.%s was a %s %s %s\n"
-        ,$this->testClassName
-        ,$result->getName()
-        ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
-        ,$result->isSuccess() ? '' : $exceptionOutput
-      ,$result->isSuccess() ? '' : sprintf( "\nComment : \n%s \n(Lines: %d-%d ~ File: %s)\n"
+        $exceptionMetadata = sprintf( "\nComment : \n%s \n(Lines: %d-%d ~ File: %s)\n"
             ,$result->getComment()
             ,$result->getTest()->getStartLine()
             ,$result->getTest()->getEndLine()
             ,$result->getTest()->getFileName()
-            )
+        );
+      }
+
+      # returns the error log
+      return sprintf( "Outkicker > %s.%s was a %s %s\n"
+        ,$this->testClassName
+        ,$result->getName()
+        ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
+        ,$exceptionOutput
         );
     }
 
     public function outputTestLog()
     {
       foreach ($this->testLog as $testResult) {
-        
+        $this->serializeTestResult()
       }
     }
 

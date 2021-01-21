@@ -11,7 +11,6 @@
     protected $_output = '';
     protected $_test = null;
     protected $_exception = null;
-    protected $_contradiction = null;
 
     public function isSuccess()
     {
@@ -69,13 +68,7 @@
       $result->_isSuccess = false;
       $result->testableInstance = $object;
       $result->_test = $test;
-      
-      # exception - contradiction seperation
-      if ($exception instanceof Contradiction) {
-        $result->_contradiction = $exception;
-      } else {
-        $result->_exception = $exception;
-      }
+      $result->_exception = $exception;
 
       return $result;
     }
