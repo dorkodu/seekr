@@ -8,30 +8,18 @@
    */
   class Say
   {
-    public function letsSay()
+    public function premise($statement, string $fallbackMessage)
     {
       
     }
-
-    /**
-     * Evaluates a PHPUnit\Framework\Constraint matcher object.
-     *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws ExpectationFailedException
-     */
-    public static function assertThat($value, Constraint $constraint, string $message = ''): void
-    {
-        self::$count += count($constraint);
-
-        $constraint->evaluate($value, $message);
-    }
-
+    
     /**
      * Check if this thing equals to your expectation.
      **/
     public static function equal($expectation, $parameterToTest)
     {
       if ($expectation !== $parameterToTest)
+      # Constraint::create("not_eq)
       throw new \Exception("SAY · Not Equal");
       
     }
