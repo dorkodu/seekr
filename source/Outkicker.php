@@ -46,12 +46,12 @@
           $exceptionMessage = sprintf( "\nException : %s", $resultException->getMessage() );
         }
 
-        $testOutput = sprintf("Output :\n%s",
-          empty($result->getOutput()) ? $result->getOutput() : ''
-        );
+        
+        $testOutput = empty($result->getOutput()) 
+          ? ""
+          : sprintf( "\nOutput : \n%s", $result->getOutput());
 
-        $exceptionMetadata = sprintf( "\nComment : \n%s \n(Lines: %d-%d ~ File: %s)\n"
-            ,$result->getComment()
+        $exceptionMetadata = sprintf( "\n(Lines: %d-%d ~ File: %s)\n"
             ,$result->getTest()->getStartLine()
             ,$result->getTest()->getEndLine()
             ,$result->getTest()->getFileName()
@@ -65,7 +65,7 @@
       }
 
       # returns the error log
-      return sprintf( "Outkicker > %s.%s() was a %s \n%s\n"
+      return sprintf( "%s.%s() was a %s %s\n"
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
@@ -73,10 +73,14 @@
         );
     }
 
+    public function consoleLog(string $contents) {
+      printf("\033[1mOutkicker >\033[0m %s", $contents);
+    }
+
     public function outputTestLog()
     {
       foreach ($this->testLog as $testResult) {
-        printf($this->serializeTestResult($testResult));
+        $this->consoleLog($this->serializeTestResult($testResult));
       }
     }
 
@@ -107,8 +111,6 @@
           $this->logTest( $result );
         }
       }
-
-      # output the test results
     }
 
     public final function seeTestResults()
@@ -119,11 +121,13 @@
 
     public final function logSummary()
     {
-      printf( "Outkicker > SUMMARY %s : %d Success %d Failed\n"
-            ,$this->testClassName
-            ,$this->_successCount
-            ,$this->_failureCount
-          );
+      $this->consoleLog( 
+        sprintf( "SUMMARY %s : %d Success %d Failed\n"
+          ,$this->testClassName
+          ,$this->_successCount
+          ,$this->_failureCount
+        ) 
+      );
 
     }
   }
