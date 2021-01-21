@@ -96,8 +96,10 @@
           try {
             $this->$methodname();
             $result = TestResult::createSuccess( $this, $method );
+            ++$this->_successCount;
           } catch( \Exception $ex ) {
             $result = TestResult::createFailure( $this, $method, $ex );
+            ++$this->_failureCount;
           }
 
           $output = ob_get_clean();
@@ -109,15 +111,14 @@
       # output the test results
     }
 
+    public final function seeTestResults()
+    {
+      $this->outputTestLog();
+      $this->logSummary();
+    }
+
     public final function logSummary()
     {
-      foreach ($this->testLog as $logEntry) {
-        if ($logEntry->isSuccess()) 
-          ++$this->_successCount;
-        else
-          ++$this->_failureCount;
-      }
-
       printf( "Outkicker > SUMMARY %s : %d Success %d Failed\n"
             ,$this->testClassName
             ,$this->_successCount

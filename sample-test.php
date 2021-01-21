@@ -32,3 +32,4 @@
     // this is how to use it.
     $test = new MyTest();
     $test->runTests();
+    $test->seeTestResults();
