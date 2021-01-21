@@ -47,7 +47,7 @@
         }
 
         
-        $testOutput = empty($result->getOutput()) 
+        $testOutput = empty($result->getOutput())
           ? ""
           : sprintf( "\nOutput : \n%s", $result->getOutput());
 
@@ -57,7 +57,7 @@
             ,$result->getTest()->getFileName()
         );
 
-        $exceptionOutput = sprintf("%s%s%s"
+        $exceptionOutput = sprintf("%s%s%s\n"
                             ,$exceptionMetadata
                             ,$exceptionMessage
                             ,$testOutput

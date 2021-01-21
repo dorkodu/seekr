@@ -9,6 +9,7 @@ use Outkicker\Contradiction;
    */
   class Say
   {
+    
     public static function premise(bool $statement, string $contradictionMessage = "", $code = null)
     {
       # is statement boolean ? if so, evaluete it
@@ -28,11 +29,19 @@ use Outkicker\Contradiction;
     }
 
     /**
+     * RULE :
+     * - Write a statement that can be resolved into a boolean value
+     * - Then propose it via Say::premise(statement, ...)
+     * - IF something goes wrong, it will throw a Contradiction
+     * - ELSE everything goes fine, nothing special happens and this means the premise is true
+     */
+
+    /**
      * Check if this thing equals to your expectation.
-     **/
+     */
     public static function equal($expectation, $parameterToTest)
     {
-      $statement = ($expectation !== $parameterToTest);
+      $statement = ($expectation === $parameterToTest);
       static::premise($statement, "Not Equal", "SAY::NOT_EQUAL");
     }
 
