@@ -57,11 +57,6 @@
       return $this->_exception;
     }
 
-    public function getContradiction()
-    {
-      return $this->_contradiction;
-    }
-
     public static function createFailure( Outkicker $object, \ReflectionMethod $test, \Exception $exception )
     {
       $result = new self();
