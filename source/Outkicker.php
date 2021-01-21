@@ -43,8 +43,7 @@
         if ($resultException instanceof Contradiction) {
           $exceptionOutput = $resultException->toString();
         } else {
-          $exceptionOutput = sprintf( "\nException : %s"
-          ,$result->getException()->getMessage() );
+          $exceptionOutput = sprintf( "\nException : %s", $resultException->getMessage() );
         }
 
         $exceptionMetadata = sprintf( "\nComment : \n%s \n(Lines: %d-%d ~ File: %s)\n"
@@ -56,10 +55,11 @@
       }
 
       # returns the error log
-      return sprintf( "Outkicker > %s.%s() was a %s %s\n"
+      return sprintf( "Outkicker > %s.%s() was a %s \n%s \n%s\n"
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
+        ,$result->getOutput()
         ,$exceptionOutput
         );
     }

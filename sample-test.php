@@ -1,5 +1,6 @@
 <?php
     require __DIR__ . '/source/Outkicker.php';
+    require __DIR__ . '/source/Contradiction.php';
     require __DIR__ . '/source/TestResult.php';
     require __DIR__ . '/source/Say.php';
     
