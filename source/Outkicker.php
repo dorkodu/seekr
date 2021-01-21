@@ -56,7 +56,7 @@
       }
 
       # returns the error log
-      return sprintf( "Outkicker > %s.%s was a %s %s\n"
+      return sprintf( "Outkicker > %s.%s() was a %s %s\n"
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
@@ -67,7 +67,7 @@
     public function outputTestLog()
     {
       foreach ($this->testLog as $testResult) {
-        $this->serializeTestResult()
+        printf($this->serializeTestResult($testResult));
       }
     }
 
@@ -79,15 +79,14 @@
       foreach( $class->getMethods() as $method )
       {
         $methodname = $method->getName();
-        if ( strlen( $methodname ) > 4 && substr( $methodname, 0, 4 ) == 'test' )
-        {
+        
+        if ( strlen( $methodname ) > 4 && substr( $methodname, 0, 4 ) == 'test' ) {
           ob_start();
+          
           # started output buffering
           try {
             $this->$methodname();
             $result = TestResult::createSuccess( $this, $method );
-          } catch( Contradiction $contradiction ) {
-            $result = TestResult::createFailure( $this, $method, $contradiction );
           } catch( \Exception $ex ) {
             $result = TestResult::createFailure( $this, $method, $ex );
           }
@@ -98,7 +97,7 @@
         }
       }
 
-      $this->logSummary();
+      # output the test results
     }
 
     public final function logSummary()

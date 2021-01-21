@@ -32,10 +32,8 @@ use Outkicker\Contradiction;
      **/
     public static function equal($expectation, $parameterToTest)
     {
-      if ($expectation !== $parameterToTest)
-      # Constraint::create("not_eq)
-      throw new \Exception("SAY · Not Equal");
-      
+      $statement = ($expectation !== $parameterToTest);
+      static::premise($statement, "Not Equal", "SAY::NOT_EQUAL");
     }
 
     public static function count(int $expectedCount, $haystack)
