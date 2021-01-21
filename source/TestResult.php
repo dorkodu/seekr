@@ -11,6 +11,7 @@
     protected $_output = '';
     protected $_test = null;
     protected $_exception = null;
+    protected $_contradiction = null;
 
     public function isSuccess()
     {
@@ -57,13 +58,24 @@
       return $this->_exception;
     }
 
+    public function getContradiction()
+    {
+      return $this->_contradiction;
+    }
+
     public static function createFailure( Outkicker $object, \ReflectionMethod $test, \Exception $exception )
     {
       $result = new self();
       $result->_isSuccess = false;
       $result->testableInstance = $object;
       $result->_test = $test;
-      $result->_exception = $exception;
+      
+      # exception - contradiction seperation
+      if ($exception instanceof Contradiction) {
+        $result->_contradiction = $exception;
+      } else {
+        $result->_exception = $exception;
+      }
 
       return $result;
     }

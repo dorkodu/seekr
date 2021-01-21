@@ -1,18 +1,32 @@
 <?php
   namespace Outkicker;
 
-  use Outkicker\Constraint;
+use Exception;
+use Outkicker\Contradiction;
 
   /**
    * Say class provides useful assertions for Outkicker tests
    */
   class Say
   {
-    public function premise($statement, string $fallbackMessage)
+    public static function premise(bool $statement, string $contradictionMessage = "", $code = null)
     {
+      # is statement boolean ? if so, evaluete it
+      # if false, throw a Contradiction, using the contradictionMessage
       
+      switch ($statement) {
+        case false:
+          throw new Contradiction($contradictionMessage, $code);
+          break;
+        case true:
+          return true;
+          break;
+        default:
+          throw new Exception("Cannot evaluate the statement from premise", "SAY::PREMISE");
+          break;
+      }
     }
-    
+
     /**
      * Check if this thing equals to your expectation.
      **/

@@ -35,14 +35,21 @@
 
     public function outputTestResult(TestResult $result)
     {
+      $exceptionOutput = "";
+
+      if ($result->getException() instanceof Contradiction) {
+
+      }
+      sprintf( "\nException : %s"
+            ,$result->getException()->getMessage()
+    );
+
       printf( "Outkicker > %s.%s was a %s %s %s\n"
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
-        ,$result->isSuccess() ? '' : sprintf( "\nException : %s"
-            ,$result->getException()->getMessage()
-            )
-        ,$result->isSuccess() ? '' : sprintf( "\nComment : \n%s \n(Lines: %d-%d ~ File: %s)\n"
+        ,$result->isSuccess() ? '' : $exceptionOutput
+      ,$result->isSuccess() ? '' : sprintf( "\nComment : \n%s \n(Lines: %d-%d ~ File: %s)\n"
             ,$result->getComment()
             ,$result->getTest()->getStartLine()
             ,$result->getTest()->getEndLine()
@@ -73,6 +80,8 @@
           try {
             $this->$methodname();
             $result = TestResult::createSuccess( $this, $method );
+          } catch( Contradiction $contradiction ) {
+            $result = TestResult::createFailure( $this, $method, $contradiction );
           } catch( \Exception $ex ) {
             $result = TestResult::createFailure( $this, $method, $ex );
           }
