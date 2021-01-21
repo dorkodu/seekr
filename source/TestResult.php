@@ -37,21 +37,6 @@
       return $this->_test->getName();
     }
 
-    public function getComment()
-    {
-      return $this->parseComment( $this->_test->getDocComment() );
-    }
-
-    private function parseComment($comment)
-    {
-      $lines = explode( "\n", $comment );
-      for( $i = 0; $i < count( $lines ); $i ++ )
-      {
-          $lines[$i] = trim( $lines[ $i ] );
-      }
-      return implode( "\n", $lines );
-    }
-
     public function getException()
     {
       return $this->_exception;
