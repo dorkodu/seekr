@@ -35,22 +35,18 @@
 
     public function reset()
     {
-      $this->beginTimestamp = NULL;
-      $this->endTimestamp = NULL;
+      $this->beginTimestamp = 0;
+      $this->endTimestamp = 0;
     }
 
     public function isStopped()
     {
-      if (!empty($this->beginTimestamp) && is_numeric($this->beginTimestamp) && !empty($this->endTimestamp) && is_numeric($this->endTimestamp)) {
-        return true;
-      } else return false;
+      return (!empty($this->beginTimestamp) && is_numeric($this->beginTimestamp) && !empty($this->endTimestamp) && is_numeric($this->endTimestamp));
     }
 
     public function isRunning()
     {
-      if (!empty($this->beginTimestamp) && is_numeric($this->beginTimestamp)) {
-        return true;
-      } else return false;
+      return (!empty($this->beginTimestamp) && is_numeric($this->beginTimestamp));
     }
 
     public function passedTime()
