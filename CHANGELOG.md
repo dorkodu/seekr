@@ -11,7 +11,7 @@
 
 ---
 
-- Add Timer to show how much it takes to run a single test.
+- Add `Timer` class to show how much it takes to run a single test.
 
 ### 0.2.1 (January 21, 2021)
 
@@ -23,8 +23,8 @@
 
 ---
 
-- Add seeTestResults() method to get output about test results. <br>Outkicker does not automatically outputs the results anymore.
-- Add a few CLI UI features, like printing bold, or imitate the behaviour of console.log() in JavaScript
+- Add `seeTestResults()` method to get output about test results. <br>Outkicker does not automatically outputs the results anymore.
+- Add a few CLI UI features, like printing bold, or imitate the behaviour of `console.log()` in JavaScript
 - Decouple testing logic and presentation logic.
 - Add meta properties to Outkicker, which can be used to access test results
 - Break some internal monolith methods into smaller units, each can be used alone
