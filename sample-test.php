@@ -28,6 +28,22 @@
       {
         Say::equal( 1, 2 );
       }
+
+       /**
+       * This test is designed to fail
+       */
+      public function testComplicated()
+      {
+        Say::equal( 1, 2 );
+        
+        $stack = [];
+        
+        for ($i = 0; $i < 10000000; $i++) {
+            array_push($stack, $i);
+        }
+
+        Say::count( 10000000, $stack);
+      }
     }
 
     // this is how to use it.
