@@ -11,6 +11,7 @@
     protected $_output = '';
     protected $_test = null;
     protected $_exception = null;
+    protected $_executionTime = null;
 
     public function isSuccess()
     {
@@ -27,6 +28,16 @@
       $this->_output = $value;
     }
 
+    public function setExecutionTime( float $value )
+    {
+      $this->_executionTime = $value;
+    }
+
+    public function getExecutionTime()
+    {
+      return $this->_executionTime;
+    }
+    
     public function getTest()
     {
       return $this->_test;
@@ -46,7 +57,7 @@
     {
       $result = new self();
       $result->_isSuccess = false;
-      $result->testableInstance = $object;
+      $result->_testableInstance = $object;
       $result->_test = $test;
       $result->_exception = $exception;
 
@@ -57,7 +68,7 @@
     {
       $result = new self();
       $result->_isSuccess = true;
-      $result->testableInstance = $object;
+      $result->_testableInstance = $object;
       $result->_test = $test;
 
       return $result;
