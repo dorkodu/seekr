@@ -9,7 +9,7 @@
     /**
      * Class constructor.
      */
-    public function __construct(string $message = "", $code = null)
+    public function __construct(string $message = "", string $code = null)
     {
       $this->message = $message;
       $this->code = $code;
