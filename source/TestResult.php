@@ -1,5 +1,5 @@
 <?php
-  namespace Outkicker;
+  namespace Seekr;
 
   /**
    * Provides a loggable entity with information on a test and how it executed
@@ -53,7 +53,7 @@
       return $this->_exception;
     }
 
-    public static function createFailure( Outkicker $object, \ReflectionMethod $test, \Exception $exception )
+    public static function createFailure( Seekr $object, \ReflectionMethod $test, \Exception $exception )
     {
       $result = new self();
       $result->_isSuccess = false;
@@ -64,7 +64,7 @@
       return $result;
     }
 
-    public static function createSuccess( Outkicker $object, \ReflectionMethod $test )
+    public static function createSuccess( Seekr $object, \ReflectionMethod $test )
     {
       $result = new self();
       $result->_isSuccess = true;

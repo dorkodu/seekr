@@ -1,5 +1,5 @@
 <?php
-  namespace Outkicker;
+  namespace Seekr;
   
   /**
    * Contradiction is a negative result of Say::premise, simply tells you why your premise makes a contradiction occur

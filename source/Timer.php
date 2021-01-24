@@ -1,5 +1,5 @@
 <?php
-  namespace Outkicker;
+  namespace Seekr;
   
   /**
    * Timer - a basic utility to use a stopwatch in PHP.

@@ -1,8 +1,8 @@
 <?php
-  namespace Outkicker;
+  namespace Seekr;
 
   use \Exception;
-  use Outkicker\Contradiction;
+  use Seekr\Contradiction;
 
   /**
    * A Premise class for proposing an assertment with a statement that can be resolved into a boolean value of true|false

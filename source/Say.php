@@ -1,33 +1,14 @@
 <?php
-  namespace Outkicker;
+  namespace Seekr;
 
-use Exception;
-use Outkicker\Contradiction;
+  use Exception;
+  use Seekr\Contradiction;
 
   /**
-   * Say class provides useful assertions for Outkicker tests
+   * Say class provides useful assertions for Seekr tests
    */
   class Say
   {
-    
-    public static function premise(bool $statement, string $contradictionMessage = "", $code = null)
-    {
-      # is statement boolean ? if so, evaluete it
-      # if false, throw a Contradiction, using the contradictionMessage
-      
-      switch ($statement) {
-        case false:
-          throw new Contradiction($contradictionMessage, $code);
-          break;
-        case true:
-          return true;
-          break;
-        default:
-          throw new Exception("Cannot evaluate the statement from premise", "SAY::PREMISE");
-          break;
-      }
-    }
-
     /**
      * RULE :
      * - Write a statement that can be resolved into a boolean value
@@ -42,46 +23,52 @@ use Outkicker\Contradiction;
     public static function equal($expectation, $parameterToTest)
     {
       $statement = ($expectation === $parameterToTest);
-      static::premise($statement, "Not Equal", "SAY::NOT_EQUAL");
+      Premise::propose($statement, "Not Equal", "SAY::EQUAL");
     }
 
     public static function count(int $expectedCount, $haystack)
     {
-      if (count($haystack) !== $expectedCount)
-      throw new \Exception("SAY : Count Does Not Match");
+      $statement = (count($haystack) === $expectedCount);
+      Premise::propose($statement, "Count Does Not Match", "SAY::COUNT");
     }
 
     public static function contains(string $needle, string $haystack)
     {
-      if (strpos($haystack, $needle) === false)
-      throw new \Exception("SAY : Not Contains");
+      $statement = (strpos($haystack, $needle) !== false);
+      Premise::propose($statement, "Does Not Contains", "SAY::CONTAINS");
     }
 
     public static function null($proposedValue)
     {
-      if(!is_null($proposedValue))
-      throw new \Exception("SAY : Not Contains");
+      $statement = is_null($proposedValue);
+      Premise::propose($statement, "Not Null", "SAY::NULL");
     }
 
     public static function notNull($proposedValue)
     {
-      return !is_null($proposedValue);
+      $statement = !is_null($proposedValue);
+      Premise::propose($statement, "Is Null", "SAY::NOT_NULL");
     }
 
     public static function empty($thing)
     {
-      return empty($thing);
+      $statement = empty($thing);
+      Premise::propose($statement, "Not Empty", "SAY::EMPTY");
     }
 
     public static function notEmpty($thing)
     {
-      return !empty($thing);
+      $statement = !empty($thing);
+      Premise::propose($statement, "Is Empty", "SAY::NOT_EMPTY");
     }
 
     public function arrayHasKey($key, array $haystack)
     {
-      return array_key_exists($key, $haystack);
+      $statement = array_key_exists($key, $haystack);
+      Premise::propose($statement, "Is Empty", "SAY::NOT_EMPTY");
     }
+
+    /*
 
     public function sayObjectEquals($objectToCompare, $objectYouHave)
     {
@@ -114,4 +101,5 @@ use Outkicker\Contradiction;
     {
       return is_file($path);
     }
+    */
   }

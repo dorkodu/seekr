@@ -1,14 +1,14 @@
 <?php
-  namespace Outkicker;
+  namespace Seekr;
 
-  use Outkicker\TestResult;
-  use Outkicker\Timer;
+  use Seekr\TestResult;
+  use Seekr\Timer;
 
   /**
    *  A simple test library developed for writing better tests on Outsights ecosystem
-   *  Outkicker provides a testable interface for a class
+   *  Seekr provides a testable interface for a class
    */
-  abstract class Outkicker
+  abstract class Seekr
   {
     protected $testClassName = "";
     protected $testLog = array();
@@ -63,7 +63,7 @@
             ,$result->getTest()->getFileName()
         );
 
-        $exceptionOutput = sprintf("%s%s%s\n"
+        $exceptionOutput = sprintf("%s%s%s"
                             ,$exceptionMetadata
                             ,$exceptionMessage
                             ,$testOutput
@@ -71,11 +71,11 @@
       }
 
       # returns the error log
-      return sprintf( "%s.%s() was a %s ~ in %.4f microseconds %s\n"
+      return sprintf( "%s.%s() was a %s ~ in %.9f seconds %s\n"
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
-        ,$result->getExecutionTime()
+        ,$result->getExecutionTime() # formats test execution time into a string
         ,$exceptionOutput
         );
     }
@@ -87,7 +87,35 @@
      * @return void
      */
     public function consoleLog(string $contents) {
-      printf("\033[1mOutkicker >\033[0m %s", $contents);
+      printf("\033[1mSeekr >\033[0m %s", $contents);
+    }
+
+    /**
+     * Formats a time number given in microseconds
+     */
+    public function formatTestExecutionTime(float $time)
+    {
+      # nanoseconds
+      # microseconds
+      # miliseconds
+      # seconds
+      
+      $formattedString = '';
+      
+      # greater than 1 nanosecond
+      if ($time > 0.000000001) {
+        # between 1 microseconds and 1 miliseconds
+        if ($time > 0.000001 && $time < 0.001) {
+          # between 1 miliseconds and 1 seconds
+          if ($time > 0.001 && $time < 1) {
+            if ($time > 1) {
+              $formattedString = sprintf("%.3f nanoseconds", $time * 1000000000);
+            } else $formattedString = sprintf("%.3f microseconds", $time * 1000000);
+          } else $formattedString = sprintf("%.3f miliseconds", $time * 1000);
+        } else $formattedString = sprintf("%.2f seconds", $time);
+      } else $formattedString = 'less than a nanosecond';
+
+      return $formattedString;
     }
 
     /**
@@ -130,7 +158,7 @@
           }
           
           $timer->stop(); # stop timer and set execution time
-          $result->setExecutionTime( $timer->passedTime() * 1000000 );
+          $result->setExecutionTime( $timer->passedTime() );
 
           $output = ob_get_clean();
           $result->setOutput( $output );
