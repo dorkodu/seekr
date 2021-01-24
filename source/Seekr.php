@@ -5,7 +5,7 @@
   use Seekr\Timer;
 
   /**
-   *  A simple test library developed for writing better tests on Outsights ecosystem
+   *  A simple test library developed for writing better tests on PHP ecosystem
    *  Seekr provides a testable interface for a class
    */
   abstract class Seekr
@@ -25,6 +25,43 @@
     {
       return $this->_failureCount;
     }
+
+    /**
+     * HOOKS
+     * -------------------------
+     * Seekr provides some lifecycle hooks that you can use to catch up with specific moments, 
+     * perform actions that you may want then
+     */
+    
+    /**
+     * This hook is called before starting to run tests in this test class
+     *
+     * @return void
+     */
+    public function setUp() {}
+
+    /**
+     * This hook is called after all tests in this test class have run
+     *
+     * @return void
+     */
+    public function finish() {}
+
+    /**
+     * This hook is called before each test of this test class is run
+     *
+     * @return void
+     */
+    public function mountedTest() {}
+
+    /**
+     * This hook is called after each test of this test class is run
+     *
+     * @return void
+     */
+    public function unmountedTest() {}
+
+    /** LOGIC */
 
     /**
      * Logs the result of a test. 
@@ -71,7 +108,7 @@
       }
 
       # returns the error log
-      return sprintf( "%s.%s() was a %s ~ in %.9f seconds %s\n"
+      return sprintf( "%s.%s() was a %s ~ in %.9f seconds %s"
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
@@ -87,35 +124,7 @@
      * @return void
      */
     public function consoleLog(string $contents) {
-      printf("\033[1mSeekr >\033[0m %s", $contents);
-    }
-
-    /**
-     * Formats a time number given in microseconds
-     */
-    public function formatTestExecutionTime(float $time)
-    {
-      # nanoseconds
-      # microseconds
-      # miliseconds
-      # seconds
-      
-      $formattedString = '';
-      
-      # greater than 1 nanosecond
-      if ($time > 0.000000001) {
-        # between 1 microseconds and 1 miliseconds
-        if ($time > 0.000001 && $time < 0.001) {
-          # between 1 miliseconds and 1 seconds
-          if ($time > 0.001 && $time < 1) {
-            if ($time > 1) {
-              $formattedString = sprintf("%.3f nanoseconds", $time * 1000000000);
-            } else $formattedString = sprintf("%.3f microseconds", $time * 1000000);
-          } else $formattedString = sprintf("%.3f miliseconds", $time * 1000);
-        } else $formattedString = sprintf("%.2f seconds", $time);
-      } else $formattedString = 'less than a nanosecond';
-
-      return $formattedString;
+      printf("\n\033[1mSeekr >\033[0m %s", $contents);
     }
 
     /**
@@ -128,21 +137,35 @@
       }
     }
 
+    /**
+     * Runs tests in the child test class
+     *
+     * @return void
+     */
     public final function runTests()
     {
       # test execution timer
       $timer = new Timer(true);
 
       # create a reflection class
-      $class = new \ReflectionClass( $this );
-      $this->testClassName = $class->getName();
+      $reflectionClass = new \ReflectionClass( $this );
+      $this->testClassName = $reflectionClass->getName();
+
+      # RUN_HOOK setUp()
+      $this->setUp();
+
+      $methodsList = $reflectionClass->getMethods();
 
       # run every test
-      foreach( $class->getMethods() as $method )
+      foreach($methodsList as $method)
       {
         $methodname = $method->getName();
+
+        # RUN_HOOK mountedTest()
+        $this->mountedTest();
         
         if ( strlen( $methodname ) > 4 && substr( $methodname, 0, 4 ) == 'test' ) {
+          # condition above means this is a test method, so mount it!
           
           ob_start();
 
@@ -164,8 +187,14 @@
           $result->setOutput( $output );
           
           $this->logTest( $result );
+
+          # RUN_HOOK unmountedTest()
+          $this->unmountedTest();
         }
       }
+
+      # RUN_HOOK finish()
+      $this->finish();
     }
 
     /**
