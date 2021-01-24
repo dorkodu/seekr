@@ -160,12 +160,11 @@
       foreach($methodsList as $method)
       {
         $methodname = $method->getName();
-
-        # RUN_HOOK mountedTest()
-        $this->mountedTest();
         
         if ( strlen( $methodname ) > 4 && substr( $methodname, 0, 4 ) == 'test' ) {
           # condition above means this is a test method, so mount it!
+          # RUN_HOOK mountedTest()
+          $this->mountedTest();
           
           ob_start();
 
