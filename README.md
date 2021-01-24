@@ -1,7 +1,7 @@
-# Outkicker
+# Seekr
 ## What?
 
-Outkicker is a simple testing library developed for writing better tests on Outsights ecosystem. <br>It is independent from Outsights, so anyone can use it in their code.
+Seekr is a simple testing library I developed for writing better tests on Outsights ecosystem. <br>It is independent from Outsights, so anyone can use it in their code.
 
 ## Why?
 
@@ -11,17 +11,18 @@ Because I found TDD a little hard. Behavior Driven Development sound much easier
 
 ### **It has a few components :**
 
-- **Say :** Provides useful assertions for Outkicker tests. Optional to use.
-- **Outkicker :** the base for testable classes. Any class that implements Outkicker, gets access to helper testing methods.
+- **Say :** Provides useful assertions for Seekr tests. Optional to use.
+- **Seekr :** the base for testable classes. Any class that implements Seekr, gets access to helper testing methods.
 - **TestResult :** An object for representing test results. This can be logged, inspected and tracked. Useful abstraction :)
-- **Contradiction :** An object for representing premise exceptions from Say.
+- **Premise :** With that, everyone can create their own premises using `Premise::propose()`. A premise throws a Contradiction in case that statement is evaluated and is equal to false.
+- **Contradiction :** An object for representing `Premise` exceptions.
 
 ### Here is a sample :
 
-- Create your test class. Test methods should start with "test". <br>When they throw an exception, Outkicker will handle it :)
+- Create your test class. Test methods should start with "test". <br>When they throw an exception, Seekr will handle it :)
 
   ```php
-  class SampleTest extends Outkicker 
+  class SampleTest extends Seekr 
   {
     // This test is designed to succeed
     public function testOne()
@@ -34,27 +35,33 @@ Because I found TDD a little hard. Behavior Driven Development sound much easier
     {
       Say::equal( 1, 2 );
     }
+    
+    // This test is designed to succeed but takes a long time
+    public function testAComplicatedLogic()
+    {
+      Do::somethingHard();
+    }
   }
   ```
   
 - Run your tests
 
   ```php
-  // This is how to use Outkicker.
+  // This is how to use Seekr.
   $test = new SampleTest();
   $test->runTests();
-  $test->seeTestResults(); // prints the results in a meaninful way
+  $test->seeTestResults(); // prints the results in a meaningful way to developers
   ```
 
 - Get the execution result in output, looks better if you use CLI
 
   ```bash
-  Outkicker > SampleTest.testOne() was a SUCCESS ~ in 10.0136 microseconds
-  Outkicker > SampleTest.testTwo() was a FAILURE ~ in 21.9345 microseconds
-    (Lines: 27-30 ~ File: /home/dorkodu/code/outkicker/sample-test.php)
+  Seekr > SampleTest.testOne() was a SUCCESS ~ in 0.008 microseconds
+  Seekr > SampleTest.testTwo() was a FAILURE ~ in 0.020 microseconds
+    (Lines: 27-30 ~ File: /home/dorkodu/code/Seekr/sample-test.php)
     Contradiction [ SAY::NOT_EQUAL ] : Not Equal
-  
-  Outkicker > SUMMARY SampleTest : 1 Success 1 Failed
+  Seekr > SampleTest.testAComplicatedLogic() was a SUCCESS ~ in 2.51 seconds
+  Seekr > SUMMARY SampleTest : 1 Success 1 Failed
   ```
 
 ## Author
@@ -65,5 +72,5 @@ See also the list of [contributions](https://libre.dorkodu.com) that we are maki
 
 ## Licence
 
-Outkicker is open-sourced software licensed under the [MIT license](LICENSE).
+Seekr is open-sourced software licensed under the [MIT license](LICENSE).
 

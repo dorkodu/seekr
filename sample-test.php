@@ -1,17 +1,18 @@
 <?php
-    require __DIR__ . '/source/Outkicker.php';
+    require __DIR__ . '/source/Seekr.php';
     require __DIR__ . '/source/Contradiction.php';
     require __DIR__ . '/source/TestResult.php';
     require __DIR__ . '/source/Timer.php';
+    require __DIR__ . '/source/Premise.php';
     require __DIR__ . '/source/Say.php';
     
-    use Outkicker\Outkicker;
-    use Outkicker\Say;
+    use Seekr\Seekr;
+    use Seekr\Say;
 
     /**
      * a simple Test suite with two tests
      **/
-    class UITest extends Outkicker
+    class SeekrTest extends Seekr
     {
       /**
        * This test is designed to succeed
@@ -29,13 +30,11 @@
         Say::equal( 1, 2 );
       }
 
-       /**
-       * This test is designed to fail
+      /**
+       * This test is designed to succeed
        */
       public function testComplicated()
       {
-        Say::equal( 1, 2 );
-        
         $stack = [];
         
         for ($i = 0; $i < 10000000; $i++) {
@@ -47,6 +46,6 @@
     }
 
     // this is how to use it.
-    $test = new UITest();
+    $test = new SeekrTest();
     $test->runTests();
     $test->seeTestResults();
