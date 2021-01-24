@@ -1,51 +1,71 @@
 <?php
-    require __DIR__ . '/source/Seekr.php';
-    require __DIR__ . '/source/Contradiction.php';
-    require __DIR__ . '/source/TestResult.php';
-    require __DIR__ . '/source/Timer.php';
-    require __DIR__ . '/source/Premise.php';
-    require __DIR__ . '/source/Say.php';
-    
-    use Seekr\Seekr;
-    use Seekr\Say;
+  require __DIR__ . '/source/Seekr.php';
+  require __DIR__ . '/source/Contradiction.php';
+  require __DIR__ . '/source/TestResult.php';
+  require __DIR__ . '/source/Timer.php';
+  require __DIR__ . '/source/Premise.php';
+  require __DIR__ . '/source/Say.php';
+  
+  use Seekr\Seekr;
+  use Seekr\Say;
 
-    /**
-     * a simple Test suite with two tests
-     **/
-    class SeekrTest extends Seekr
+  /**
+   * A simple Test class with a few tests
+   */
+  class SampleTest extends Seekr
+  {
+    public function setUp()
     {
-      /**
-       * This test is designed to succeed
-       */
-      public function testOne()
-      {
-        Say::equal( 2, 2 );
-      }
-
-      /**
-       * This test is designed to fail
-       */
-      public function testTwo()
-      {
-        Say::equal( 1, 2 );
-      }
-
-      /**
-       * This test is designed to succeed
-       */
-      public function testComplicated()
-      {
-        $stack = [];
-        
-        for ($i = 0; $i < 10000000; $i++) {
-            array_push($stack, $i);
-        }
-
-        Say::count( 10000000, $stack);
-      }
+      echo "\nThis is setUp() hook!";
     }
 
-    // this is how to use it.
-    $test = new SeekrTest();
-    $test->runTests();
-    $test->seeTestResults();
+    public function finish()
+    {
+      echo "\nThis is finish() hook!";
+    }
+
+    public function mountedTest()
+    {
+      echo "\nThis is mountedTest() hook!";
+    }
+
+    public function unmountedTest()
+    {
+      echo "\nThis is unmountedTest() hook!";
+    }
+
+    /**
+     * This test is designed to succeed
+     */
+    public function testOne()
+    {
+      Say::equal(1, 1);
+    }
+
+    /**
+     * This test is designed to fail
+     */
+    public function testTwo()
+    {
+      Say::equal(1, 2);
+    }
+
+    /**
+     * This test is designed to succeed
+     */
+    public function testComplicated()
+    {
+      $stack = [];
+      
+      for ($i = 0; $i < 10000000; $i++) {
+          array_push($stack, $i);
+      }
+
+      Say::count( 10000000, $stack);
+    }
+  }
+
+  // this is how to use it.
+  $test = new SampleTest();
+  $test->runTests();
+  $test->seeTestResults();
