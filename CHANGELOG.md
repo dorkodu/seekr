@@ -1,12 +1,11 @@
 # Seekr ~ Change Log
 
-### 1.0.0 ( [UNKNOWN] ~ 2021)
+### 1.0.0 Stability Expectations
 
 ---
 
-- Will release to public !
 - Seekr will be able to be used on production.<br>It will have enough features to be a minimalistic testing library.<br>It gives developers a few useful way which they can write and run tests locally. Easily and fast!<br>
-- It will have `Say` helper class which provides useful ready-to-go premises to developers. They can use them to simplify their code. Work for `Say` is in progress, and seems to always be ;)
+- It will have a stable `Say` helper class which provides useful ready-to-go premises to developers. <br>People can use them to simplify their code. Work for `Say` is in progress, and seems to always be ;)
 
 ### 0.6.0 (January 24, 2021)
 
@@ -24,8 +23,20 @@
 
 ---
 
+- **RENAMED** the library :  ~~Outkicker~~ to **Seekr**
+
 - Designed a logo after renaming the library.<br>
-- New name with our motto :<br> **"Seeking more efficient and accurate tests in your code<br> while preventing potential bugs, inconsistencies fast, simply and wisely."**
+
+- New name with our motto :<br>
+
+  **Seekr**<br>"Seeking more efficient and accurate tests in your code<br> while preventing potential bugs, inconsistencies fast, simply and wisely."
+
+- **REWRITE**
+
+  - Rewrote the whole library from scratch with what I learned through the journey.<br>I approached the concept from first principles.
+  - Fixed inconsistencies
+  - Simplified and decoupled some units.
+  - Removed some unnecessary internal code
 
 ### 0.4.0 (January 23, 2021)
 
@@ -40,7 +51,7 @@
 
 ---
 
-- **NEW !** Add `Timer` class to show how much it takes to run a single test.
+- **NEW !** Add `Timer` class to show how much it takes to run each test.
 - Updated output for the sake of aesthetics
 
 ### 0.2.1 (January 21, 2021)
