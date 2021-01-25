@@ -4,7 +4,7 @@
 
 ## What?
 
-Seekr is a simple testing library that is for writing better tests easily and wisely on PHP. <br>Although my first commit was for the sake of writing more accurate tests for Outsights framework,<br>Seekr is independent from any ecosystem or framework. So anyone can use it in their code.
+Seekr is a simple testing library that is for writing better tests easily and wisely on PHP. <br>Seekr is independent from any ecosystem or framework. So anyone can use it in their code.
 
 ## Why?
 
