@@ -1,4 +1,4 @@
-![Seekr Logo](/home/dorkodu/code/seekr/assets/seekr-logo.png)
+![Seekr Logo](assets/seekr-logo.png)
 
 # Seekr
 
