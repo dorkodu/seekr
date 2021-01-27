@@ -8,7 +8,7 @@ Seekr is a simple testing library that is for writing better tests easily and wi
 
 ## Why?
 
-Because I found TDD a little hard. Behavior Driven Development sound much easier and made sense to me. So, instead of spending days to figure out how to write tests, how to integrate them with my existing code, how to set up a "build pipeline" ; I created a simple and minimalistic PHP testing library to write more accurate, efficient tests in my code.
+Because I found TDD a little hard. Behavior Driven Development sound much easier and made sense to me. So, instead of spending days to figure out how to write tests, how to integrate them with my existing code, how to set up a "build pipeline" **;** I created a simple and minimalistic PHP testing library to write more accurate, efficient tests in my code.
 
 ## How?
 
