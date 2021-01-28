@@ -2,7 +2,7 @@
   namespace Seekr;
 
   use Seekr\TestResult;
-  use Seekr\Timer;
+  use Seekr\PerformanceProfiler;
 
   /**
    *  A simple test library developed for writing better tests on PHP ecosystem
@@ -108,11 +108,12 @@
       }
 
       # returns the error log
-      return sprintf( "%s.%s() was a %s ~ in %.9f seconds %s"
+      return sprintf( "%s.%s() was a %s ~ in %.6f seconds ~ %s %s"
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
         ,$result->getExecutionTime() # formats test execution time into a string
+        ,$result->getPeakMemoryUsage() # formats test execution time into a string
         ,$exceptionOutput
         );
     }
@@ -144,8 +145,12 @@
      */
     public final function runTests()
     {
-      # test execution timer
-      $timer = new Timer(true);
+      /**
+       * performance profiling (time & memory) for test executions
+       * Precisions :
+       * 1/100.000 for time -- 1/100 for memory
+       */ 
+      $profiler = new PerformanceProfiler(6, 2);
 
       # create a reflection class
       $reflectionClass = new \ReflectionClass( $this );
@@ -162,7 +167,7 @@
         $methodname = $method->getName();
         
         if ( strlen( $methodname ) > 4 && substr( $methodname, 0, 4 ) == 'test' ) {
-          # condition above means this is a test method, so mount it!
+          # condition above means this is a test method, if so mounts it !
           # RUN_HOOK mountedTest()
           $this->mountedTest();
           
@@ -170,7 +175,7 @@
 
           # started output buffering
           try {
-            $timer->start(); # start timer
+            $profiler->start(); # start profiler
             $this->$methodname(); # run test method
             $result = TestResult::createSuccess( $this, $method );
             ++$this->_successCount;
@@ -179,8 +184,10 @@
             ++$this->_failureCount;
           }
           
-          $timer->stop(); # stop timer and set execution time
-          $result->setExecutionTime( $timer->passedTime() );
+          # stop profiler and get results
+          $profiler->stop(); 
+          $result->setExecutionTime( $profiler->passedTime() );
+          $result->setPeakMemoryUsage( $profiler->memoryPeakUsage() );
 
           $output = ob_get_clean();
           $result->setOutput( $output );
