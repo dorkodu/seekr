@@ -108,7 +108,7 @@
       }
 
       # returns the error log
-      return sprintf( "%s.%s() was a %s ~ in %.6f seconds ~ %s %s"
+      return sprintf( "%s.%s() was a %s ~ in %.6f seconds ~ at peak %s %s"
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
