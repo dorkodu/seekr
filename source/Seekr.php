@@ -30,7 +30,7 @@
      * HOOKS
      * -------------------------
      * Seekr provides some lifecycle hooks that you can use to catch up with specific moments, 
-     * perform actions that you may want then
+     * then perform actions that you may want/need
      */
     
     /**
@@ -38,28 +38,28 @@
      *
      * @return void
      */
-    public function setUp() {}
+    public function setUp() { }
 
     /**
      * This hook is called after all tests in this test class have run
      *
      * @return void
      */
-    public function finish() {}
+    public function finish() { }
 
     /**
      * This hook is called before each test of this test class is run
      *
      * @return void
      */
-    public function mountedTest() {}
+    public function mountedTest() { }
 
     /**
      * This hook is called after each test of this test class is run
      *
      * @return void
      */
-    public function unmountedTest() {}
+    public function unmountedTest() { }
 
     /** LOGIC */
 
@@ -228,6 +228,5 @@
           ,$this->_failureCount
         ) 
       );
-
     }
   }
