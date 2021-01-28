@@ -1,5 +1,4 @@
 <?php
-
   require __DIR__ . '/source/Seekr.php';
   require __DIR__ . '/source/Contradiction.php';
   require __DIR__ . '/source/TestResult.php';
