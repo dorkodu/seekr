@@ -12,6 +12,7 @@
     protected $_test = null;
     protected $_exception = null;
     protected $_executionTime = null;
+    protected $_peakMemoryUsage = null;
 
     public function isSuccess()
     {
@@ -31,6 +32,16 @@
     public function setExecutionTime( float $value )
     {
       $this->_executionTime = $value;
+    }
+
+    public function setPeakMemoryUsage( $value )
+    {
+      $this->_peakMemoryUsage = $value;
+    }
+
+    public function getPeakMemoryUsage()
+    {
+      return $this->_peakMemoryUsage;
     }
 
     public function getExecutionTime()
