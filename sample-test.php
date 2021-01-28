@@ -4,6 +4,7 @@
   require __DIR__ . '/source/TestResult.php';
   require __DIR__ . '/source/Timer.php';
   require __DIR__ . '/source/Premise.php';
+  require __DIR__ . '/source/PerformanceProfiler.php';
   require __DIR__ . '/source/Say.php';
   
   use Seekr\Seekr;
@@ -57,11 +58,11 @@
     {
       $stack = [];
       
-      for ($i = 0; $i < 10000000; $i++) {
+      for ($i = 0; $i < 100000000; $i++) {
           array_push($stack, $i);
       }
 
-      Say::count( 10000000, $stack);
+      Say::count( 100000000, $stack);
     }
   }
 
