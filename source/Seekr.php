@@ -112,8 +112,8 @@
         ,$this->testClassName
         ,$result->getName()
         ,$result->isSuccess() ? 'SUCCESS' : 'FAILURE'
-        ,$result->getExecutionTime() # formats test execution time into a string
-        ,$result->getPeakMemoryUsage() # formats test execution time into a string
+        ,$result->getExecutionTime() # get test execution time
+        ,$result->getPeakMemoryUsage() # get test peak memory usage
         ,$exceptionOutput
         );
     }
@@ -124,7 +124,8 @@
      * @param string $contents
      * @return void
      */
-    public function consoleLog(string $contents) {
+    public function consoleLog(string $contents) 
+    {
       printf("\n\033[1mSeekr >\033[0m %s", $contents);
     }
 

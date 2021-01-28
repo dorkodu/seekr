@@ -37,6 +37,11 @@
     }
 
     /**
+     * This test is empty
+     */
+    public function testEmpty() { }
+    
+    /**
      * This test is designed to succeed
      */
     public function testOne()
@@ -59,11 +64,11 @@
     {
       $stack = [];
       
-      for ($i = 0; $i < 10000000; $i++) {
+      for ($i = 0; $i < 8000000; $i++) {
           array_push($stack, $i);
       }
 
-      Say::count( 10000000, $stack);
+      Say::count( 8000000, $stack);
     }
   }
 
