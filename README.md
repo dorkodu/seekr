@@ -8,7 +8,7 @@ Seekr is a simple testing library that is for writing better tests easily and wi
 
 ## Why?
 
-Because I found TDD a little hard. Behavior Driven Development sound much easier and made sense to me. So, instead of spending days to figure out how to write tests, how to integrate them with my existing code, how to set up a "build pipeline" **;** I created a simple and minimalistic PHP testing library to write more accurate, efficient tests in my code.
+Because I found TDD a little hard. Behavior Driven Development sound much easier and made sense to me. <br>So, instead of spending days to figure out **how to write tests**, **how to integrate them with my existing code**, **how to set up a "build pipeline" ;** I created a simple and minimalistic PHP testing library to write more ***wisely, accurate, efficient*** tests in my code.
 
 ## How?
 
@@ -28,7 +28,7 @@ There are a few advanced features of Seekr. <br>If you like it, you can take a l
 
 ### Here is a sample :
 
-- Create your test class. Test methods should start with "**test**". <br>When they throw an exception, Seekr will handle it :)
+- Create your test class. Test method names must start with "**test**". <br>When they throw an exception, Seekr will handle it :)
 
   ```php
   class SampleTest extends Seekr 
@@ -46,9 +46,9 @@ There are a few advanced features of Seekr. <br>If you like it, you can take a l
     }
     
     // This test is designed to succeed but takes a long time
-    public function testComplicated()
+    public function testLong()
     {
-      Do::somethingHard();
+      Do::somethingExpensive();
     }
   }
   ```
@@ -70,7 +70,7 @@ There are a few advanced features of Seekr. <br>If you like it, you can take a l
   Seekr > SampleTest.testTwo() was a FAILURE ~ in 0.000018 seconds ~ 498.81 kB
     (Lines: 27-30 ~ File: /home/dorkodu/code/Seekr/sample-test.php)
     Contradiction [ SAY::NOT_EQUAL ] : Not Equal
-  Seekr > SampleTest.testComplicated() was a SUCCESS ~ in 1.645084601 seconds
+  Seekr > SampleTest.testlong() was a SUCCESS ~ in 2.425403 seconds ~ 512.47 MB
   Seekr > SUMMARY SampleTest : 2 Success 1 Failed
   ```
 
