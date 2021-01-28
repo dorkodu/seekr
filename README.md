@@ -66,8 +66,8 @@ There are a few advanced features of Seekr. <br>If you like it, you can take a l
 - Get the execution result in output, looks better if you use CLI
 
   ```bash
-  Seekr > SampleTest.testOne() was a SUCCESS ~ in 0.000025090 seconds
-  Seekr > SampleTest.testTwo() was a FAILURE ~ in 0.000018347 seconds
+  Seekr > SampleTest.testOne() was a SUCCESS ~ in 0.000025 seconds ~ 498.81 kB
+  Seekr > SampleTest.testTwo() was a FAILURE ~ in 0.000018 seconds ~ 498.81 kB
     (Lines: 27-30 ~ File: /home/dorkodu/code/Seekr/sample-test.php)
     Contradiction [ SAY::NOT_EQUAL ] : Not Equal
   Seekr > SampleTest.testComplicated() was a SUCCESS ~ in 1.645084601 seconds
