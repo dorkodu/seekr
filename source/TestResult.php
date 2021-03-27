@@ -1,5 +1,5 @@
 <?php
-  namespace Seekr;
+  namespace Dorkodu\Seekr;
 
   /**
    * Provides a loggable entity with information on a test and how it executed

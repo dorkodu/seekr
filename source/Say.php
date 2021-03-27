@@ -1,8 +1,8 @@
 <?php
-  namespace Seekr;
+  namespace Dorkodu\Seekr;
 
   use Exception;
-  use Seekr\Contradiction;
+  use Dorkodu\Seekr\Contradiction;
 
   /**
    * Say class provides useful assertions for Seekr tests

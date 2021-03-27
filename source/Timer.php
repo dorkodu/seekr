@@ -1,5 +1,5 @@
 <?php
-  namespace Seekr;
+  namespace Dorkodu\Seekr;
   
   /**
    * Timer - a basic utility to use a stopwatch in PHP.

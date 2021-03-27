@@ -1,8 +1,8 @@
 <?php
-  namespace Seekr;
+  namespace Dorkodu\Seekr;
 
   use \Exception;
-  use Seekr\Contradiction;
+  use Dorkodu\Seekr\Contradiction;
 
   /**
    * A Premise class for proposing an assertment with a statement that can be resolved into a boolean value of true|false

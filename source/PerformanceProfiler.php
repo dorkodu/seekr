@@ -1,7 +1,7 @@
 <?php
-  namespace Seekr;
+  namespace Dorkodu\Seekr;
 
-  use Seekr\Timer;
+  use Dorkodu\Seekr\Timer;
   
   class PerformanceProfiler
   {

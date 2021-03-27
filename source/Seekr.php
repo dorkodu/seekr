@@ -1,8 +1,8 @@
 <?php
-  namespace Seekr;
+  namespace Dorkodu\Seekr;
 
-  use Seekr\TestResult;
-  use Seekr\PerformanceProfiler;
+  use Dorkodu\Seekr\TestResult;
+  use Dorkodu\Seekr\PerformanceProfiler;
 
   /**
    *  A simple test library developed for writing better tests on PHP ecosystem
