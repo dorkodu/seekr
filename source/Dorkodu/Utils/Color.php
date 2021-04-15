@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Seekr\Utils;
+namespace Dorkodu\Utils;
 
 use const DIRECTORY_SEPARATOR;
 use function array_keys;
@@ -18,6 +18,15 @@ use function sprintf;
 use function strtr;
 use function trim;
 
+/**
+ * Color - A util class for styling text on Terminal environment using ANSI codes.
+ * Difficulty = Hardcore
+ * 
+ * @author     Doruk Eray (@dorkodu) <doruk@dorkodu.com>
+ * @copyright  (c) 2021, Doruk Eray
+ * @link       <https://github.com/dorukdorkodu/dorkodu-utils>
+ * @license    The MIT License (MIT)
+ */
 final class Color
 {
   /**
@@ -25,7 +34,7 @@ final class Color
    */
   private const WHITESPACE_MAP = [
     ' '  => '·',
-    "\t" => '⇥',
+    "\t" => '→',
   ];
 
   /**
@@ -33,7 +42,7 @@ final class Color
    */
   private const WHITESPACE_EOL_MAP = [
     ' '  => '·',
-    "\t" => '⇥',
+    "\t" => '→',
     "\n" => '↵',
     "\r" => '⟵',
   ];
@@ -41,12 +50,13 @@ final class Color
   /**
    * @var array<string,string>
    */
-  private static array $ansiCodes = [
+  private static $ansiCodes = [
     'reset'      => '0',
     'bold'       => '1',
     'dim'        => '2',
     'dim-reset'  => '22',
     'underlined' => '4',
+    'reversed'   => '7',
     'fg-default' => '39',
     'fg-black'   => '30',
     'fg-red'     => '31',
@@ -67,10 +77,17 @@ final class Color
     'bg-white'   => '47',
   ];
 
-  public static function colorize(string $color, string $buffer): string
+  /**
+   * List the styles seperated with a ',' (comma) to be applied to given string
+   *
+   * @param string $color
+   * @param string $text
+   * @return string
+   */
+  public static function colorize(string $color, string $text): string
   {
-    if (trim($buffer) === '') {
-      return $buffer;
+    if (trim($text) === '') {
+      return $text;
     }
 
     $codes  = array_map('\trim', explode(',', $color));
@@ -83,10 +100,10 @@ final class Color
     }
 
     if (empty($styles)) {
-      return $buffer;
+      return $text;
     }
 
-    return self::optimizeColor(sprintf("\x1b[%sm", implode(';', $styles)) . $buffer . "\x1b[0m");
+    return self::optimizeColor(sprintf("\x1b[%sm", implode(';', $styles)) . $text . "\x1b[0m");
   }
 
   public static function colorizePath(string $path, ?string $prevPath = null, bool $colorizeFilename = false): string
@@ -118,25 +135,25 @@ final class Color
     return self::optimizeColor(implode(self::dim(DIRECTORY_SEPARATOR), $path));
   }
 
-  public static function dim(string $buffer): string
+  public static function dim(string $text): string
   {
-    if (trim($buffer) === '') {
-      return $buffer;
+    if (trim($text) === '') {
+      return $text;
     }
 
-    return "\e[2m{$buffer}\e[22m";
+    return "\e[2m{$text}\e[22m";
   }
 
-  public static function visualizeWhitespace(string $buffer, bool $visualizeEOL = false): string
+  public static function visualizeWhitespace(string $text, bool $visualizeEOL = false): string
   {
     $replaceMap = $visualizeEOL ? self::WHITESPACE_EOL_MAP : self::WHITESPACE_MAP;
 
     return preg_replace_callback('/\s+/', static function ($matches) use ($replaceMap) {
       return self::dim(strtr($matches[0], $replaceMap));
-    }, $buffer);
+    }, $text);
   }
 
-  private static function optimizeColor(string $buffer): string
+  private static function optimizeColor(string $text): string
   {
     $patterns = [
       "/\e\\[22m\e\\[2m/"                   => '',
@@ -144,6 +161,11 @@ final class Color
       "/(\e\\[[^m]*m)+(\e\\[0m)/"           => '$2',
     ];
 
-    return preg_replace(array_keys($patterns), array_values($patterns), $buffer);
+    return preg_replace(array_keys($patterns), array_values($patterns), $text);
   }
 }
+
+echo PHP_EOL;
+echo Color::colorize('bold, fg-white, bg-red', " FAIL ");
+echo PHP_EOL;
+echo PHP_EOL;

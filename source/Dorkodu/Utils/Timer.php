@@ -1,6 +1,6 @@
 <?php
 
-namespace Dorkodu\Seekr;
+namespace Dorkodu\Utils;
 
 /**
  * Timer - a basic utility to use a stopwatch in PHP.
