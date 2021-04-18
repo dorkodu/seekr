@@ -46,4 +46,67 @@ final class TestResult
   private function __construct()
   {
   }
+
+
+  public function isSuccess()
+  {
+    return $this->isSuccess;
+  }
+
+  public function getOutput()
+  {
+    return $this->output;
+  }
+
+  public function setOutput(string $value)
+  {
+    $this->output = $value;
+  }
+
+  public function setExecutionTime(float $value)
+  {
+    $this->executionTime = $value;
+  }
+
+  public function setPeakMemoryUsage($value)
+  {
+    $this->peakMemoryUsage = $value;
+  }
+
+  public function getPeakMemoryUsage()
+  {
+    return $this->peakMemoryUsage;
+  }
+
+  public function getExecutionTime()
+  {
+    return $this->executionTime;
+  }
+
+  public function getTest()
+  {
+    return $this->test;
+  }
+
+  public function getName()
+  {
+    return $this->test->getName();
+  }
+
+  public function getException()
+  {
+    return $this->exception;
+  }
+
+  public function getComment(ReflectionMethod $method)
+  {
+    $comment = $method->getDocComment();
+
+    $lines = explode("\n", $comment);
+
+    for ($i = 0; $i < count($lines); $i++) {
+      $lines[$i] = trim($lines[$i]);
+    }
+    return implode("\n", $lines);
+  }
 }
