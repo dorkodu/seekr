@@ -12,15 +12,22 @@ Because I found TDD a little hard. Behavior Driven Development sound much easier
 
 ## How?
 
-Simple. Create a class for your tests. Extend Seekr. <br>Write test methods and start their name with 'test', like **testFoo**, **testBar** etc.<br>Then create an instance of that class. You are ready to go! Run your test file.<br>If you want to see beautified results, we recommend using PHP CLI.
+Simple. There are two different methods.
 
-Use  `$testClass->runTests()` to run tests. <br>This will run each of your test methods and create a TestResult for each. <br>These result objects are stored in`$this->testLog` property. <br>Use  `$testClass->seeTestResults()` to see your results on CLI<br>
+1. You can write single callback-style tests 
+2. You can write test classes using *TestCase*<br>Create a class for your tests. Extend *TestCase*.<br>Write test methods and start their name with 'test', like **testFoo**, **testBar** etc.<br>Then create an instance of that class. Add it to your TestRepository instance.<br>You are ready to go!
+
+If you want to see beautified results, we recommend using PHP CLI.
+
+Write  `Seekr::run()` to run tests. <br>This will run each of your test methods & functions and create a TestResult for each. <br>These result objects are stored in Seekr's `static::$log` property. <br>Use  `Seekr::seeResults()` to see your results on CLI<br>
 
 There are a few advanced features of Seekr. <br>If you like it, you can take a look on them too :smile:
 
 ### **It has a few components :**
 
 - **Seekr :** The base for testable classes. Any class that extends Seekr, gets access to helper testing methods.
+- **TestRepository :** The base for testable classes. Any class that extends Seekr, gets access to helper testing methods.
+- **TestCase :** The base for testable classes. Any class that extends *TestCase*, can be used as as a test class.
 - **Say :** Provides useful assertions for Seekr tests. Optional to use.
 - **TestResult :** An object for representing test results. This can be logged, inspected and tracked. <br>Useful abstraction :)
 - **Premise :** With that, everyone can create their own premises using `Premise::propose()`. <br>A premise throws a Contradiction in case that statement is evaluated and is equal to false.<br>This is considered an exception and Seekr marks this test as a failure. Otherwise it is succeed.
