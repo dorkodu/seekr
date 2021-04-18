@@ -157,4 +157,30 @@ final class Seekr
   {
     return static::$log['success'];
   }
+
+
+  /**
+   * Runs the tests.
+   *
+   * @return void
+   */
+  public static function run($showResults = true)
+  {
+    Console::breakLine();
+    Console::writeLine(static::seekrBrand());
+
+    static::newRepositoryIfEmpty();
+
+    foreach (static::$repo->testCases() as $test) {
+      self::handleTestCase($test);
+    }
+
+    foreach (static::$repo->testFunctions() as $test) {
+      self::handleTestFunction($test);
+    }
+
+    if ($showResults) {
+      self::seeResults();
+    }
+  }
 }
