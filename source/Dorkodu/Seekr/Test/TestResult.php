@@ -109,4 +109,37 @@ final class TestResult
     }
     return implode("\n", $lines);
   }
+
+  /** 
+   * Creates a failed test result for TestCase 
+   * @param ReflectionMethod $test 
+   * @param Exception $exception 
+   * @param TestCase|null $testCase 
+   */
+  public static function caseFailed(TestCase $testCase, ReflectionMethod $test, Exception $exception)
+  {
+    $result = new self();
+    $result->isSuccess = false;
+    $result->testableInstance = $testCase;
+    $result->test = $test;
+    $result->exception = $exception;
+
+    return $result;
+  }
+
+  /**
+   * Creates a successful test result for TestCase
+   *
+   * @param TestCase $testCase
+   * @param ReflectionMethod $test
+   */
+  public static function caseSucceed(TestCase $testCase, ReflectionMethod $test)
+  {
+    $result = new self();
+    $result->isSuccess = true;
+    $result->testableInstance = $testCase;
+    $result->test = $test;
+
+    return $result;
+  }
 }
