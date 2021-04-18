@@ -30,8 +30,14 @@ class Say
 
   public static function count(int $expectedCount, $haystack)
   {
-    $statement = (count($haystack) === $expectedCount);
+    $statement = Constraint::count($expectedCount, $haystack);
     Premise::propose($statement, "Count Does Not Match", "SAY::COUNT");
+  }
+
+  public static function notCount(int $expectedCount, $haystack)
+  {
+    $statement = !Constraint::count($expectedCount, $haystack);
+    Premise::propose($statement, "Count Matches", "SAY::NOT_COUNT");
   }
 
   public static function contains($needle, iterable $haystack)
@@ -244,38 +250,29 @@ class Say
 
   public static function hasMethod($object, string $propertyName)
   {
-    $statement =
-      (function ($o, $n) {
-      })($object, $propertyName);
+    $statement = Constraint::hasMethod($object, $propertyName);
+    Premise::propose($statement, "Does Not Have Method", "SAY::HAS_METHOD");
+  }
 
+  public static function hasNotMethod($object, string $propertyName)
+  {
+    $statement = Constraint::hasMethod($object, $propertyName);
     Premise::propose($statement, "Does Not Have Method", "SAY::HAS_METHOD");
   }
 
   public static function hasKey($haystack, $key)
   {
-    $statement =
-      (function ($o, $n) {
-        if (is_array($o)) {
-          return array_key_exists($n, $o);
-        }
-
-        if ($o instanceof ArrayAccess) {
-          return $o->offsetExists($n);
-        }
-
-        return false;
-      })($haystack, $key);
-
+    $statement = Constraint::hasKey($haystack, $key);
     Premise::propose($statement, "Does Not Have Key", "SAY::HAS_KEY");
   }
 
-  public static function notHasKey($)
+  public static function notHasKey($haystack, $key)
   {
-    Constraint::hasKey
-
-    Premise::propose($statement, "", "SAY::");
+    $statement = !Constraint::hasKey($haystack, $key);
+    Premise::propose($statement, "Has Key", "SAY::HAS_NOT_KEY");
   }
 
+  /*
 
   public static function ($)
   {
@@ -285,4 +282,6 @@ class Say
 
     Premise::propose($statement, "", "SAY::");
   }
+
+  */
 }
