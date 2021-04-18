@@ -97,25 +97,29 @@ final class Seekr
   }
 
   /**
-   * Add a TestFunction to be run
-   *
-   * @param TestFunction $test
-   */
-  public static function addTestFunction(TestFunction $test)
-  {
-    static::newRepositoryIfEmpty();
-    static::$repo->addFunction($test);
-  }
-
-  /**
-   * Add a TestCase to be run
+   * Add a TestCase to the queue that will be run
    *
    * @param TestCase $test
    */
-  public static function addTestCase(TestCase $test)
+  public static function testCase(TestCase $test)
   {
     static::newRepositoryIfEmpty();
     static::$repo->addCase($test);
+  }
+
+  /**
+   * Shorthand for adding single callback tests.
+   *
+   * @param string $description
+   * @param Closure $closure
+   *
+   * @return void
+   */
+  public static function test(string $description, Closure $closure)
+  {
+    static::newRepositoryIfEmpty();
+    $test = new TestFunction($description, $closure);
+    static::$repo->addFunction($test);
   }
 
   /**
@@ -158,7 +162,6 @@ final class Seekr
     return static::$log['success'];
   }
 
-
   /**
    * Runs the tests.
    *
@@ -196,7 +199,6 @@ final class Seekr
    */
   public static function seeResults()
   {
-
     if (!static::$showOnlyFailures) {
       foreach (self::successLog() as $testResult) {
         Console::breakLine();
@@ -336,19 +338,4 @@ final class Seekr
     # HOOK finish()
     $case->finish();
   }
-}
-
-
-/**
- * Shorthand for callback tests.
- *
- * @param string $description
- * @param Closure $closure
- *
- * @return void
- */
-function seekr(string $description, Closure $closure)
-{
-  $test = new TestFunction($description, $closure);
-  Seekr::addTestFunction($test);
 }
