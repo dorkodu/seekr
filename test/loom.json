@@ -1,0 +1,9 @@
+{
+    "knotted": {
+        "classmap": [],
+        "namespaces": {
+          "Dorkodu": "../source/Dorkodu",
+          "Seekr": "../source/Dorkodu/Seekr"
+        }
+    }
+}
