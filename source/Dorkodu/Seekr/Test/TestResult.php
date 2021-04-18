@@ -142,4 +142,42 @@ final class TestResult
 
     return $result;
   }
+
+  /**
+   * @return boolean
+   */
+  public function isTestFunction()
+  {
+    return $this->test instanceof TestFunction;
+  }
+
+  /**
+   * Creates a failed test result for TestFunction
+   *
+   * @param TestFunction $test
+   * @param Exception $exception
+   */
+  public static function functionFailed(TestFunction $test, Exception $exception)
+  {
+    $result = new self();
+    $result->isSuccess = false;
+    $result->test = $test;
+    $result->exception = $exception;
+
+    return $result;
+  }
+
+  /**
+   * Creates a successful test result for TestFunction
+   *
+   * @param TestFunction $testCase
+   */
+  public static function functionSucceed(TestFunction $test)
+  {
+    $result = new self();
+    $result->isSuccess = true;
+    $result->test = $test;
+
+    return $result;
+  }
 }
