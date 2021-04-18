@@ -29,6 +29,22 @@ use Exception;
  */
 final class Seekr
 {
+  /**
+   * Current test repository to be run
+   * @var TestRepository|null
+   */
+  private static $repo = null;
+
+  /**
+   * Holds the TestResult logs.
+   */
+  private static $log = array(
+    'success' => array(),
+    'failure' => array()
+  );
+
+  private static $successCount = 0;
+  private static $failureCount = 0;
+
+  public static $showOnlyFailures = false;
 }
-
-
