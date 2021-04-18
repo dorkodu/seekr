@@ -180,4 +180,81 @@ final class TestResult
 
     return $result;
   }
+
+  /**
+   * Returns the string representation of the TestResult
+   *
+   * @return string
+   */
+  public function toString()
+  {
+    $exceptionOutput = "";
+
+    if (!$this->isSuccess()) {
+
+      $resultException = $this->getException();
+
+      if ($resultException instanceof Contradiction) {
+        $exceptionMessage = $resultException->toString();
+      } else {
+
+        $exceptionMessage =
+          Color::colorize("bold, underlined, fg-red", "Exception")
+          . sprintf(" %s", $resultException->getMessage());
+      }
+
+      $testOutput = empty($this->getOutput())
+        ? ""
+        : sprintf("\nOutput : \n%s", $this->getOutput());
+
+      if ($this->isTestFunction()) {
+        $testReflection = new ReflectionFunction($this->test->callback());
+      } else {
+        $testReflection = $this->getTest();
+      }
+
+      $startLine = $this->exception->getLine();
+      $filePath = $this->exception->getFile();
+
+      $exceptionMetadata = sprintf(
+        "\nat %s:%s\n",
+        Color::colorize("fg-green", $filePath),
+        Color::dim(
+          Color::colorize("bold, fg-green", sprintf("%d", $startLine))
+        )
+      );
+
+      $exceptionOutput = sprintf(
+        "%s%s%s",
+        $exceptionMetadata,
+        $exceptionMessage,
+        $testOutput
+      );
+    }
+
+    $successLabel = $this->isSuccess()
+      ? Color::colorize("bold, fg-white, bg-green", ' PASS ')
+      : Color::colorize("bold, fg-white, bg-red", ' FAIL ');
+
+    # test name differs between TestFunction and TestCase
+    if ($this->isTestFunction()) {
+      $testName = '"' . $this->test->description() . '"';
+    } else {
+      $testName = sprintf(
+        "%s::%s()",
+        (new ReflectionClass($this->testableInstance))->getName(),
+        $this->getName()
+      );
+    }
+
+    # returns the error log
+    return sprintf(
+      "%s %s \n~ in %.6f seconds ~ %s %s",
+      $successLabel,
+      Color::colorize("bold", $testName),
+      $this->getExecutionTime(), # get test execution time,
+      $this->getPeakMemoryUsage(), # get test peak memory usage
+      $exceptionOutput
+    );
+  }
 }
