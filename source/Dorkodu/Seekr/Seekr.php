@@ -75,4 +75,46 @@ final class Seekr
       static::$repo = new TestRepository();
     }
   }
+
+  /**
+   * Resets Seekr's all settings and test repository
+   *
+   * @return void
+   */
+  public static function reset()
+  {
+    static::$repo = new TestRepository();
+
+    static::$log = array(
+      'success' => array(),
+      'failure' => array()
+    );
+
+    static::$successCount = 0;
+    static::$failureCount = 0;
+
+    static::$showOnlyFailures = false;
+  }
+
+  /**
+   * Add a TestFunction to be run
+   *
+   * @param TestFunction $test
+   */
+  public static function addTestFunction(TestFunction $test)
+  {
+    static::newRepositoryIfEmpty();
+    static::$repo->addFunction($test);
+  }
+
+  /**
+   * Add a TestCase to be run
+   *
+   * @param TestCase $test
+   */
+  public static function addTestCase(TestCase $test)
+  {
+    static::newRepositoryIfEmpty();
+    static::$repo->addCase($test);
+  }
 }
