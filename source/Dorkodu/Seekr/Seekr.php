@@ -68,4 +68,11 @@ final class Seekr
   {
     return static::$failureCount;
   }
+
+  private static function newRepositoryIfEmpty()
+  {
+    if (!(static::$repo instanceof TestRepository) || is_null(static::$repo)) {
+      static::$repo = new TestRepository();
+    }
+  }
 }
