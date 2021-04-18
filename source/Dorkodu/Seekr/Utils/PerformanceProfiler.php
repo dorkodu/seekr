@@ -16,4 +16,19 @@ class PerformanceProfiler
     $this->memoryPrecision = $memoryPrecision;
     $this->timer = new Timer(true);
   }
+
+  public function start()
+  {
+    $this->timer->start();
+  }
+
+  public function stop()
+  {
+    $this->timer->stop();
+  }
+
+  public function reset()
+  {
+    $this->timer->reset();
+  }
 }
