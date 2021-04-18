@@ -9,22 +9,6 @@ use Exception;
  */
 class SampleTest extends TestCase
 {
-  public function setUp()
-  {
-  }
-
-  public function finish()
-  {
-  }
-
-  public function mountedTest()
-  {
-  }
-
-  public function unmountedTest()
-  {
-  }
-
   /**
    * This test is empty
    */
@@ -53,7 +37,7 @@ class SampleTest extends TestCase
    */
   public function testThree()
   {
-    throw new Exception("bug :D", 1);
+    throw new InvalidArgumentException("Invalid argument ERROR!");
   }
 
   /**
