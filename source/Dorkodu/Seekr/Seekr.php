@@ -337,3 +337,18 @@ final class Seekr
     $case->finish();
   }
 }
+
+
+/**
+ * Shorthand for callback tests.
+ *
+ * @param string $description
+ * @param Closure $closure
+ *
+ * @return void
+ */
+function seekr(string $description, Closure $closure)
+{
+  $test = new TestFunction($description, $closure);
+  Seekr::addTestFunction($test);
+}
