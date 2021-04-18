@@ -2,10 +2,18 @@
 
 error_reporting(E_ERROR);
 
-require_once "loot/loom-weaver.php";
+require "loot/loom-weaver.php";
 require_once "SampleTest.php";
+# require_once "../source/Dorkodu/Seekr/Seekr.php";
 
 use Dorkodu\Seekr\Seekr;
 
-Seekr::addTestCase(new SampleTest());
+use function \Dorkodu\Seekr\seekr;
+
+Seekr::testCase(new SampleTest());
+
+Seekr::test("it has nothing.", function () {
+  throw new Exception("Bir Error.");
+});
+
 Seekr::run();
