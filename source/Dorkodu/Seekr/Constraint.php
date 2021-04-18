@@ -177,6 +177,43 @@ class Constraint
     return is_finite($thing);
   }
 
+  # STRING
+
+  public static function matchesRegularExpression(string $pattern): RegularExpression
+  {
+    return new RegularExpression($pattern);
+  }
+
+  public static function matches(string $string): StringMatchesFormatDescription
+  {
+    return new StringMatchesFormatDescription($string);
+  }
+
+  public static function stringStartsWith($prefix): StringStartsWith
+  {
+    return new StringStartsWith($prefix);
+  }
+
+  public static function stringContains(string $string, bool $case = true): StringContains
+  {
+    return new StringContains($string, $case);
+  }
+
+  public static function stringEndsWith(string $suffix): StringEndsWith
+  {
+    return new StringEndsWith($suffix);
+  }
+
+  public static function countOf(int $count): Count
+  {
+    return new Count($count);
+  }
+
+  public static function objectEquals(object $object, string $method = 'equals'): ObjectEquals
+  {
+    return new ObjectEquals($object, $method);
+  }
+
   # RELATIONS
 
   public static function instanceOf($object, $className)
@@ -224,9 +261,18 @@ class Constraint
     return false;
   }
 
-
   public static function hasValue($haystack, $value)
   {
     return self::contains($value, $haystack);
+  }
+
+  private static function isValidObjectAttributeName(string $attributeName): bool
+  {
+    return (bool) preg_match('/[^\x00-\x1f\x7f-\x9f]+/', $attributeName);
+  }
+
+  private static function isValidClassAttributeName(string $attributeName): bool
+  {
+    return (bool) preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/', $attributeName);
   }
 }
