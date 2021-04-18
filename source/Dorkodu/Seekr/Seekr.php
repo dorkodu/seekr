@@ -47,4 +47,25 @@ final class Seekr
   private static $failureCount = 0;
 
   public static $showOnlyFailures = false;
+
+  /**
+   * Seekr will only show failures, if you call this.
+   *
+   * @param boolean $value
+   * @return void
+   */
+  public static function showOnlyFailures(bool $value = true)
+  {
+    self::$showOnlyFailures = $value;
+  }
+
+  public static function successCount()
+  {
+    return static::$successCount;
+  }
+
+  public static function failureCount()
+  {
+    return static::$failureCount;
+  }
 }
