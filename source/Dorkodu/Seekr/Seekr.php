@@ -228,4 +228,43 @@ final class Seekr
       static::$failureCount
     );
   }
+
+  /**
+   * @internal
+   */
+  private static function handleTestFunction(TestFunction $test)
+  {
+    $description = $test->description();
+
+    /**
+     * Performance profiling (time & memory) for test executions
+     * Precisions :
+     * 1/1.000.000 for time -- 1/100 for memory
+     */
+    $profiler = new PerformanceProfiler(6, 2);
+
+    # started output buffering
+    ob_start();
+
+    try {
+      $profiler->start(); # start profiler
+      $test->callback()(); # run test method
+      $result = TestResult::functionSucceed($test);
+      ++static::$successCount;
+    } catch (\Exception $e) {
+      $result = TestResult::functionFailed($test, $e);
+      ++static::$failureCount;
+    }
+
+    # stop profiler and generate the result
+    $profiler->stop();
+
+    $result->setExecutionTime($profiler->passedTime());
+    $result->setPeakMemoryUsage($profiler->memoryPeakUsage());
+
+    $output = ob_get_clean();
+    $result->setOutput($output);
+
+    self::log($result);
+  }
 }
