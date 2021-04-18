@@ -29,7 +29,7 @@ class Console
   public static function write(string $buffer)
   {
     if (!self::isCLI()) {
-      $buffer = nl2br(htmlspecialchars($buffer, ENT_COMPAT | ENT_SUBSTITUTE));
+      $buffer = htmlspecialchars($buffer, ENT_COMPAT | ENT_SUBSTITUTE);
     }
 
     print $buffer;
@@ -65,8 +65,6 @@ class Console
   }
 
   /**
-   * Undocumented function
-   *
    * @param int $index Index of the argument in 'argv' array.
    * @return void
    */
