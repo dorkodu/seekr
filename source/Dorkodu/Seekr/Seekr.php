@@ -117,4 +117,15 @@ final class Seekr
     static::newRepositoryIfEmpty();
     static::$repo->addCase($test);
   }
+
+  /**
+   * Set the current test repository to be run
+   *
+   * @param TestRepository $testRepository
+   * @return void
+   */
+  public function setRepository(TestRepository $testRepository)
+  {
+    static::$repo = $testRepository;
+  }
 }
