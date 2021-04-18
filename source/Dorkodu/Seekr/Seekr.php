@@ -128,4 +128,33 @@ final class Seekr
   {
     static::$repo = $testRepository;
   }
+
+  /**
+   * Logs the result of a test.
+   * Keeps track of results for later inspection.
+   */
+  protected static function log(TestResult $result)
+  {
+    if ($result->isSuccess()) {
+      array_push(static::$log['success'], $result);
+    } else {
+      array_push(static::$log['failure'], $result);
+    }
+  }
+
+  /**
+   * Only failed test results
+   */
+  public static function failureLog()
+  {
+    return static::$log['failure'];
+  }
+
+  /**
+   * Only successful test results
+   */
+  public static function successLog()
+  {
+    return static::$log['success'];
+  }
 }
