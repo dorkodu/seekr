@@ -267,4 +267,73 @@ final class Seekr
 
     self::log($result);
   }
+
+
+  /**
+   * @internal
+   */
+  private static function handleTestCase(TestCase $case)
+  {
+    /**
+     * Performance profiling (time & memory) for test executions
+     * Precisions :
+     * 1/1.000.000 for time -- 1/100 for memory
+     */
+    $profiler = new PerformanceProfiler(6, 2);
+
+    # create a reflection class
+    $reflectionClass = new ReflectionClass($case);
+
+    # $testClassName = $reflectionClass->getName();
+
+    # HOOK setUp()
+    $case->setUp();
+
+    $methodsList = $reflectionClass->getMethods();
+
+    # run every test
+    foreach ($methodsList as $method) {
+      $methodname = $method->getName();
+
+      # if this is a test method, mount it !
+      if (strlen($methodname) > 4 && substr($methodname, 0, 4) == 'test') {
+
+        # HOOK mountedTest()
+        $case->mountedTest();
+
+        # started output buffering
+        ob_start();
+
+        try {
+          # start profiler
+          $profiler->start();
+          # run test method
+          $case->$methodname();
+
+          $result = TestResult::caseSucceed($case, $method);
+          ++static::$successCount;
+        } catch (Exception $ex) {
+          $result = TestResult::caseFailed($case, $method, $ex);
+          ++static::$failureCount;
+        }
+
+        # stop profiler and get results
+        $profiler->stop();
+
+        $result->setExecutionTime($profiler->passedTime());
+        $result->setPeakMemoryUsage($profiler->memoryPeakUsage());
+
+        $output = ob_get_clean();
+        $result->setOutput($output);
+
+        self::log($result);
+
+        # HOOK unmountedTest()
+        $case->unmountedTest();
+      }
+    }
+
+    # HOOK finish()
+    $case->finish();
+  }
 }
