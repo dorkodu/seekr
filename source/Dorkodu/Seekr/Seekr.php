@@ -183,4 +183,49 @@ final class Seekr
       self::seeResults();
     }
   }
+
+  private static function seekrBrand()
+  {
+    return Color::colorize("bold, bg-black, fg-white", " Seekr :: Simple, Wise Testing for PHP ");
+  }
+
+  /**
+   * Outputs the test results. Overridable to output to elsewhere
+   *
+   * @return void
+   */
+  public static function seeResults()
+  {
+
+    if (!static::$showOnlyFailures) {
+      foreach (self::successLog() as $testResult) {
+        Console::breakLine();
+        Console::writeLine($testResult->toString());
+      }
+    }
+
+    foreach (self::failureLog() as $testResult) {
+      Console::breakLine();
+      Console::writeLine($testResult->toString());
+    }
+
+    Console::breakLine();
+    Console::writeLine(self::summary());
+  }
+
+  /**
+   * Prints a summary from the current test results
+   *
+   * @return void
+   */
+  private static function summary()
+  {
+    return sprintf(
+      Color::colorize("bg-blue, fg-white, bold", " SUMMARY ")
+        . " " . Color::colorize("bold, underlined", "%d") . " Succeed "
+        . Color::colorize("bold, underlined", "%d") . " Failed\n",
+      static::$successCount,
+      static::$failureCount
+    );
+  }
 }
