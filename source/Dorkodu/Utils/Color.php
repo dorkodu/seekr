@@ -164,8 +164,3 @@ final class Color
     return preg_replace(array_keys($patterns), array_values($patterns), $text);
   }
 }
-
-echo PHP_EOL;
-echo Color::colorize('bold, fg-white, bg-red', " FAIL ");
-echo PHP_EOL;
-echo PHP_EOL;
