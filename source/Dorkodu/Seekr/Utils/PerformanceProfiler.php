@@ -31,4 +31,19 @@ class PerformanceProfiler
   {
     $this->timer->reset();
   }
+
+  public function passedTime()
+  {
+    return round($this->timer->passedTime(), $this->timePrecision);
+  }
+
+  public function memoryPeakUsage()
+  {
+    return self::formatBytes(memory_get_peak_usage(), $this->memoryPrecision);
+  }
+
+  public function memoryUsage()
+  {
+    return self::formatBytes(memory_get_usage(), $this->memoryPrecision);
+  }
 }
