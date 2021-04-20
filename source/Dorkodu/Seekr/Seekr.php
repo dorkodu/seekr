@@ -15,7 +15,6 @@ use Dorkodu\Utils\Color;
 use Dorkodu\Utils\Console;
 
 use Closure;
-use Dorkodu\Utils\TerminalUI;
 use ReflectionClass;
 use Exception;
 
@@ -189,12 +188,10 @@ final class Seekr
 
   private static function seekrBrand()
   {
-    return Color::colorize("bold, bg-black, fg-white", " Seekr :: Simple, Wise Testing for PHP ");
+    return Color::colorize("bold, bg-black, fg-white", " Seekr - Simple, Wise Testing for PHP ");
   }
 
   /**
-   * Outputs the test results. Overridable to output to elsewhere
-   *
    * @return void
    */
   public static function seeResults()
