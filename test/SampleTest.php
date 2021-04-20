@@ -1,8 +1,10 @@
 <?php
 
-use Dorkodu\Seekr\Say;
-use Dorkodu\Seekr\Test\TestCase;
+
 use Exception;
+use Dorkodu\Seekr\Say;
+use InvalidArgumentException;
+use Dorkodu\Seekr\Test\TestCase;
 
 /**
  * A simple Test class with a few tests

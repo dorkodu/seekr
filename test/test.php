@@ -7,8 +7,7 @@ require_once "SampleTest.php";
 # require_once "../source/Dorkodu/Seekr/Seekr.php";
 
 use Dorkodu\Seekr\Seekr;
-
-use function \Dorkodu\Seekr\seekr;
+// use SeekrTest\Samples\Joke\SampleTest;
 
 Seekr::testCase(new SampleTest());
 
