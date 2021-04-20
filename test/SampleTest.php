@@ -10,41 +10,19 @@ use Dorkodu\Seekr\Test\TestCase;
 class SampleTest extends TestCase
 {
   /**
-   * This test is empty
-   */
-  public function testEmpty()
-  {
-  }
-
-  /**
-   * This test is designed to succeed
+   * This test will pass
    */
   public function testOne()
   {
-    echo "hello";
+    echo "This will pass.";
   }
 
   /**
-   * This test is designed to fail
+   * This test will fail
    */
   public function testTwo()
   {
-    throw new Exception("bug :D", 1);
-  }
-
-  /**
-   * This test is designed to fail
-   */
-  public function testThree()
-  {
-    throw new InvalidArgumentException("Invalid argument ERROR!");
-  }
-
-  /**
-   * This test is designed to fail
-   */
-  public function testFour()
-  {
-    throw new Exception("bug :D", 1);
+    echo "This is the output from a failed test";
+    throw new Exception("This is an exception from a failed test.");
   }
 }
