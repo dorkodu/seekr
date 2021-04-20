@@ -146,7 +146,7 @@ final class TestResult
   /**
    * @return boolean
    */
-  public function isTestFunction()
+  public function isFunctionTest()
   {
     return $this->test instanceof TestFunction;
   }
@@ -205,19 +205,16 @@ final class TestResult
 
       $testOutput = empty($this->getOutput())
         ? ""
-        : sprintf("\nOutput : \n%s", $this->getOutput());
-
-      if ($this->isTestFunction()) {
-        $testReflection = new ReflectionFunction($this->test->callback());
-      } else {
-        $testReflection = $this->getTest();
-      }
+        : sprintf(
+          "" . Color::colorize("bold, underlined, fg-yellow", "Output") . "\n%s",
+          $this->getOutput()
+        );
 
       $startLine = $this->exception->getLine();
       $filePath = $this->exception->getFile();
 
       $exceptionMetadata = sprintf(
-        "\nat %s:%s\n",
+        "at %s:%s",
         Color::colorize("fg-green", $filePath),
         Color::dim(
           Color::colorize("bold, fg-green", sprintf("%d", $startLine))
@@ -225,7 +222,7 @@ final class TestResult
       );
 
       $exceptionOutput = sprintf(
-        "%s%s%s",
+        "%s\n\%s\n%s",
         $exceptionMetadata,
         $exceptionMessage,
         $testOutput
@@ -237,7 +234,7 @@ final class TestResult
       : Color::colorize("bold, fg-white, bg-red", ' FAIL ');
 
     # test name differs between TestFunction and TestCase
-    if ($this->isTestFunction()) {
+    if ($this->isFunctionTest()) {
       $testName = $this->test->description();
     } else {
       $ref = new ReflectionClass($this->testableInstance);
