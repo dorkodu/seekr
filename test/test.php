@@ -1,18 +1,23 @@
 <?php
 
-error_reporting(E_ERROR);
-
+/**
+ * We used Loom dependency utility for autoloading, 
+ * but you probably use Composer. Doesn't matter :)
+ */
 require "loot/loom-weaver.php";
+
+# this is the test file
 require_once "SampleTest.php";
-# require_once "../source/Dorkodu/Seekr/Seekr.php";
 
 use Dorkodu\Seekr\Seekr;
-// use SeekrTest\Samples\Joke\SampleTest;
 
+# You can add a test case class by giving an instance of it.
 Seekr::testCase(new SampleTest());
 
-Seekr::test("it has nothing.", function () {
-  throw new Exception("Bir Error.");
+# You can also write functional tests by giving a description and a callback 
+Seekr::test("a simple test callback.", function () {
+  throw new Exception("This is an exception by");
 });
 
+# Run Seekr
 Seekr::run();
