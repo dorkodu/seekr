@@ -37,7 +37,10 @@ final class Seekr
   /**
    * Holds the TestResult logs.
    */
-  private static $log = array();
+  private static $log = array(
+    'callbacks' => array(),
+    'cases' => array()
+  );
 
   private static $successCount = 0;
   private static $failureCount = 0;
@@ -68,7 +71,10 @@ final class Seekr
   {
     static::$repo = new TestRepository();
 
-    static::$log = array();
+    static::$log = array(
+      'callbacks' => array(),
+      'cases' => array()
+    );
 
     static::$successCount = 0;
     static::$failureCount = 0;
@@ -118,32 +124,17 @@ final class Seekr
   protected static function log(TestResult $result)
   {
     if ($result->isFunctionTest()) {
-      array_push(static::$log['__callbacks'], $result);
+      array_push(static::$log['callbacks'], $result);
       return;
     }
 
     $testClassName = $result->getTest()->class;
-    if (is_array(static::$log[$testClassName])) {
-      static::$log[$testClassName] = array();
+
+    if (!is_array(static::$log['cases'][$testClassName])) {
+      static::$log['cases'][$testClassName] = array();
     }
 
-    array_push(static::$log[$testClassName], $result);
-  }
-
-  /**
-   * Only failed test results
-   */
-  public static function failureLog()
-  {
-    return static::$log['failure'];
-  }
-
-  /**
-   * Only successful test results
-   */
-  public static function successLog()
-  {
-    return static::$log['success'];
+    array_push(static::$log['cases'][$testClassName], $result);
   }
 
   /**
@@ -154,8 +145,6 @@ final class Seekr
    */
   public static function run($showResults = true)
   {
-
-
     static::newRepositoryIfEmpty();
 
     foreach (static::$repo->testCases() as $test) {
@@ -178,23 +167,116 @@ final class Seekr
     return Color::colorize("bold, bg-black, fg-white", " Seekr - Simple, Wise Testing for PHP ");
   }
 
+  private static function generateExceptionOutput(TestResult $testResult)
+  {
+    $exceptionOutput = "";
+
+    if (!$testResult->isSuccess()) {
+
+      $resultException = $testResult->getException();
+
+      if ($resultException instanceof Contradiction) {
+        $exceptionMessage = $resultException->toString();
+      } else {
+
+        $exceptionMessage =
+          Color::colorize("bold, underlined, fg-red", "Exception")
+          . sprintf(" %s", $resultException->getMessage());
+      }
+
+      $testOutput = empty($testResult->getOutput())
+        ? ""
+        : sprintf(
+          "" . Color::colorize("bold, underlined, fg-yellow", "Output") . "\n%s",
+          $testResult->getOutput()
+        );
+
+      $startLine = $testResult->getException()->getLine();
+      $filePath = $testResult->getException()->getFile();
+
+      $exceptionMetadata = sprintf(
+        "at %s:%s",
+        Color::colorize("fg-green", $filePath),
+        Color::dim(
+          Color::colorize("bold, fg-green", sprintf("%d", $startLine))
+        )
+      );
+
+      $exceptionOutput = sprintf(
+        "%s\n%s\n%s",
+        $exceptionMetadata,
+        $exceptionMessage,
+        $testOutput
+      );
+    }
+
+    return $exceptionOutput;
+  }
+
+  /**
+   * @internal toString() for TestResult, will be shown on Seekr CLI UI
+   */
+  private static function stringifyTestResult(TestResult $testResult)
+  {
+
+    $successLabel = $testResult->isSuccess()
+      ? Color::colorize("bold, fg-white, bg-green", ' PASS ')
+      : Color::colorize("bold, fg-white, bg-red", ' FAIL ');
+
+    # test name differs between TestFunction and TestCase
+    if ($testResult->isFunctionTest()) {
+      $testName = $testResult->getTest()->description();
+    } else {
+      $ref = new ReflectionClass($testResult->getTestableInstance());
+
+      $testName = sprintf(
+        "%s::%s()",
+        Color::colorize("dim", $ref->getNamespaceName())
+          . Color::colorize("bold", $ref->getShortName()),
+        $testResult->getName()
+      );
+    }
+
+    # returns the error log
+    return sprintf(
+      "%s %s \n%s\n%s %s",
+      $successLabel,
+      $testName,
+      static::generateExceptionOutput($testResult),
+      sprintf(
+        Color::colorize("bold", "Time:") . " %.6fs",
+        $testResult->getExecutionTime(), # get test execution time,
+      ),
+      sprintf(
+        Color::colorize("bold", "Memory Peak:") . " %s",
+        $testResult->getPeakMemoryUsage(), # get test execution time,
+      )
+    );
+  }
+
   /**
    * @return void
    */
   public static function seeResults()
   {
-    foreach (self::successLog() as $testResult) {
+    foreach (static::$log['cases'] as $testCaseName => $resultSet) {
+
+      $filteredResults = array_filter($resultSet, function ($result) {
+        # code...
+      });
+
+      foreach ($resultSet as $result) {
+      }
       Console::breakLine();
-      Console::writeLine($testResult->toString());
+      Console::writeLine(static::stringifyTestResult($result));
     }
 
-    foreach (self::failureLog() as $testResult) {
+    foreach (static::$log['callbacks'] as $result) {
       Console::breakLine();
-      Console::writeLine($testResult->toString());
+      Console::writeLine(self::stringifyTestResult($result));
     }
 
-    Console::breakLine();
-    Console::writeLine(self::summary());
+    static::summary();
   }
 
   /**
@@ -202,14 +284,17 @@ final class Seekr
    *
    * @return void
    */
-  private static function summary()
+  public static function summary()
   {
-    return sprintf(
-      Color::colorize("bg-blue, fg-white, bold", " SUMMARY ")
-        . " " . Color::colorize("bold, underlined", "%d") . " passed "
-        . Color::colorize("bold, underlined", "%d") . " failed\n",
-      static::$successCount,
-      static::$failureCount
+    Console::breakLine();
+    Console::writeLine(
+      sprintf(
+        Color::colorize("bg-blue, fg-white, bold", " SUMMARY ")
+          . " " . Color::colorize("bold, underlined", "%d") . " passed "
+          . Color::colorize("bold, underlined", "%d") . " failed\n",
+        static::$successCount,
+        static::$failureCount
+      )
     );
   }
 
