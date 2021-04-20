@@ -21,11 +21,12 @@ Seekr::testCase(new SampleTest());
  * by giving a description and a callback 
  */
 Seekr::test("a failing test callback.", function () {
-  throw new Exception("This is an exception by");
+  echo "This is the output of a failed test.";
+  throw new Exception("This is an exception from a failed test.");
 });
 
 Seekr::test("a passing test callback.", function () {
-  echo "merhaba :)";
+  echo "This test will pass :)";
 });
 
 # Run Seekr
