@@ -98,6 +98,11 @@ final class TestResult
     return $this->exception;
   }
 
+  public function getTestableInstance()
+  {
+    return $this->testableInstance;
+  }
+
   public function getComment(ReflectionMethod $method)
   {
     $comment = $method->getDocComment();
@@ -179,85 +184,5 @@ final class TestResult
     $result->test = $test;
 
     return $result;
-  }
-
-  /**
-   * Returns the string representation of the TestResult
-   *
-   * @return string
-   */
-  public function toString()
-  {
-    $exceptionOutput = "";
-
-    if (!$this->isSuccess()) {
-
-      $resultException = $this->getException();
-
-      if ($resultException instanceof Contradiction) {
-        $exceptionMessage = $resultException->toString();
-      } else {
-
-        $exceptionMessage =
-          Color::colorize("bold, underlined, fg-red", "Exception")
-          . sprintf(" %s", $resultException->getMessage());
-      }
-
-      $testOutput = empty($this->getOutput())
-        ? ""
-        : sprintf(
-          "" . Color::colorize("bold, underlined, fg-yellow", "Output") . "\n%s",
-          $this->getOutput()
-        );
-
-      $startLine = $this->exception->getLine();
-      $filePath = $this->exception->getFile();
-
-      $exceptionMetadata = sprintf(
-        "at %s:%s",
-        Color::colorize("fg-green", $filePath),
-        Color::dim(
-          Color::colorize("bold, fg-green", sprintf("%d", $startLine))
-        )
-      );
-
-      $exceptionOutput = sprintf(
-        "%s\n\%s\n%s",
-        $exceptionMetadata,
-        $exceptionMessage,
-        $testOutput
-      );
-    }
-
-    $successLabel = $this->isSuccess()
-      ? Color::colorize("bold, fg-white, bg-green", ' PASS ')
-      : Color::colorize("bold, fg-white, bg-red", ' FAIL ');
-
-    # test name differs between TestFunction and TestCase
-    if ($this->isFunctionTest()) {
-      $testName = $this->test->description();
-    } else {
-      $ref = new ReflectionClass($this->testableInstance);
-
-      $testName = sprintf(
-        "%s::%s()",
-        Color::colorize("dim", $ref->getNamespaceName())
-          . Color::colorize("bold", $ref->getShortName()),
-        $this->getName()
-      );
-    }
-
-    # returns the error log
-    return sprintf(
-      "%s %s \n%s\n%s %s",
-      $successLabel,
-      $testName,
-      sprintf(
-        Color::colorize("bold", "Time:") . " %.6f seconds",
-        $this->getExecutionTime(), # get test execution time,
-      ),
-      $this->getPeakMemoryUsage(), # get test peak memory usage
-      $exceptionOutput
-    );
   }
 }
