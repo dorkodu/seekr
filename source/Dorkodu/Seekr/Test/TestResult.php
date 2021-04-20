@@ -103,18 +103,6 @@ final class TestResult
     return $this->testableInstance;
   }
 
-  public function getComment(ReflectionMethod $method)
-  {
-    $comment = $method->getDocComment();
-
-    $lines = explode("\n", $comment);
-
-    for ($i = 0; $i < count($lines); $i++) {
-      $lines[$i] = trim($lines[$i]);
-    }
-    return implode("\n", $lines);
-  }
-
   /** 
    * Creates a failed test result for TestCase 
    * @param ReflectionMethod $test 
