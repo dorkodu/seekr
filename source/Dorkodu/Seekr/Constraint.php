@@ -2,12 +2,15 @@
 
 namespace Dorkodu\Seekr;
 
+use Countable;
 use Exception;
 use ArrayAccess;
 use ReflectionClass;
+use ReflectionObject;
 use SplObjectStorage;
 use Dorkodu\Utils\Str;
 use ReflectionException;
+use PHPUnit\Framework\Constraint\ClassHasStaticAttribute;
 
 /**
  * Constraint class provides useful conditions for easy to use.
@@ -25,6 +28,21 @@ class Constraint
 
   public static function count(int $expectedCount, $haystack)
   {
+    if (!$haystack instanceof Countable && !is_iterable($haystack)) {
+      throw InvalidArgumentException::create(2, 'countable or iterable');
+    }
+
+    if ($haystack instanceof Generator) {
+      (new WarningUtil)->createForTestCaseObjectOnCallStack(
+        'Passing an argument of type Generator for the $haystack parameter is deprecated. Support for this will be removed in PHPUnit 11.'
+      );
+    }
+
+    static::assertThat(
+      $haystack,
+      new Count($expectedCount),
+      $message
+    );
     return (count($haystack) === $expectedCount);
   }
 
@@ -179,39 +197,34 @@ class Constraint
 
   # STRING
 
-  public static function matchesRegularExpression(string $pattern): RegularExpression
+  public static function isJson(string $text)
   {
-    return new RegularExpression($pattern);
+    if ($text === '') {
+      return false;
+    }
+
+    json_decode($text);
+
+    if (json_last_error()) {
+      return false;
+    }
+
+    return true;
   }
 
-  public static function matches(string $string): StringMatchesFormatDescription
+  public static function matchesRegularExpression(string $pattern, string $text)
   {
-    return new StringMatchesFormatDescription($string);
+    return preg_match($pattern, $text) > 0;
   }
 
-  public static function stringStartsWith($prefix): StringStartsWith
+  public static function stringStartsWith(string $text, string $prefix)
   {
-    return new StringStartsWith($prefix);
+    return Str::startsWith($text, $prefix);
   }
 
-  public static function stringContains(string $string, bool $case = true): StringContains
+  public static function stringEndsWith(string $text, string $suffix)
   {
-    return new StringContains($string, $case);
-  }
-
-  public static function stringEndsWith(string $suffix): StringEndsWith
-  {
-    return new StringEndsWith($suffix);
-  }
-
-  public static function countOf(int $count): Count
-  {
-    return new Count($count);
-  }
-
-  public static function objectEquals(object $object, string $method = 'equals'): ObjectEquals
-  {
-    return new ObjectEquals($object, $method);
+    return Str::endsWith($text, $suffix);
   }
 
   # RELATIONS
@@ -233,6 +246,25 @@ class Constraint
         $e
       );
     }
+  }
+
+  public static function hasStaticProperty($object, string $attributeName)
+  {
+    try {
+      $class = new ReflectionClass($object);
+
+      if ($class->hasProperty($attributeName)) {
+        return $class->getProperty($attributeName)->isStatic();
+      }
+    } catch (ReflectionException $e) {
+      throw new Exception(
+        $e->getMessage(),
+        (int) $e->getCode(),
+        $e
+      );
+    }
+
+    return false;
   }
 
   public static function hasMethod($object, string $propertyName)
@@ -264,6 +296,27 @@ class Constraint
   public static function hasValue($haystack, $value)
   {
     return self::contains($value, $haystack);
+  }
+
+  public static function sameSize($expected, $actual)
+  {
+    if (!$expected instanceof Countable && !is_iterable($expected)) {
+      throw new Exception('Argument Is Not Countable or Iterable', 1);
+    }
+
+    if (!$actual instanceof Countable && !is_iterable($actual)) {
+      throw new Exception('Argument Is Not Countable or Iterable', 1);
+    }
+  }
+
+  public static function identicalTo($value): IsIdentical
+  {
+    return new IsIdentical($value);
+  }
+
+  public static function isInstanceOf(string $className): IsInstanceOf
+  {
+    return new IsInstanceOf($className);
   }
 
   private static function isValidObjectAttributeName(string $attributeName): bool
