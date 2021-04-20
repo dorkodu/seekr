@@ -238,21 +238,27 @@ final class TestResult
 
     # test name differs between TestFunction and TestCase
     if ($this->isTestFunction()) {
-      $testName = '"' . $this->test->description() . '"';
+      $testName = $this->test->description();
     } else {
+      $ref = new ReflectionClass($this->testableInstance);
+
       $testName = sprintf(
         "%s::%s()",
-        (new ReflectionClass($this->testableInstance))->getName(),
+        Color::colorize("dim", $ref->getNamespaceName())
+          . Color::colorize("bold", $ref->getShortName()),
         $this->getName()
       );
     }
 
     # returns the error log
     return sprintf(
-      "%s %s \n~ in %.6f seconds ~ %s %s",
+      "%s %s \n%s\n%s %s",
       $successLabel,
-      Color::colorize("bold", $testName),
-      $this->getExecutionTime(), # get test execution time,
+      $testName,
+      sprintf(
+        Color::colorize("bold", "Time:") . " %.6f seconds",
+        $this->getExecutionTime(), # get test execution time,
+      ),
       $this->getPeakMemoryUsage(), # get test peak memory usage
       $exceptionOutput
     );
