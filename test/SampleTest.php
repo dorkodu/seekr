@@ -1,7 +1,5 @@
 <?php
 
-
-use Exception;
 use Dorkodu\Seekr\Say;
 use InvalidArgumentException;
 use Dorkodu\Seekr\Test\TestCase;
