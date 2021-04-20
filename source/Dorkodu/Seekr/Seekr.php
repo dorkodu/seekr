@@ -37,26 +37,10 @@ final class Seekr
   /**
    * Holds the TestResult logs.
    */
-  private static $log = array(
-    'success' => array(),
-    'failure' => array()
-  );
+  private static $log = array();
 
   private static $successCount = 0;
   private static $failureCount = 0;
-
-  public static $showOnlyFailures = false;
-
-  /**
-   * Seekr will only show failures, if you call this.
-   *
-   * @param boolean $value
-   * @return void
-   */
-  public static function showOnlyFailures(bool $value = true)
-  {
-    self::$showOnlyFailures = $value;
-  }
 
   public static function successCount()
   {
@@ -84,15 +68,10 @@ final class Seekr
   {
     static::$repo = new TestRepository();
 
-    static::$log = array(
-      'success' => array(),
-      'failure' => array()
-    );
+    static::$log = array();
 
     static::$successCount = 0;
     static::$failureCount = 0;
-
-    static::$showOnlyFailures = false;
   }
 
   /**
@@ -138,11 +117,17 @@ final class Seekr
    */
   protected static function log(TestResult $result)
   {
-    if ($result->isSuccess()) {
-      array_push(static::$log['success'], $result);
-    } else {
-      array_push(static::$log['failure'], $result);
+    if ($result->isFunctionTest()) {
+      array_push(static::$log['__callbacks'], $result);
+      return;
     }
+
+    $testClassName = $result->getTest()->class;
+    if (is_array(static::$log[$testClassName])) {
+      static::$log[$testClassName] = array();
+    }
+
+    array_push(static::$log[$testClassName], $result);
   }
 
   /**
@@ -164,12 +149,12 @@ final class Seekr
   /**
    * Runs the tests.
    *
+   * @param boolean $showResults If you set this to false, Seekr will NOT output the results.
    * @return void
    */
   public static function run($showResults = true)
   {
-    Console::breakLine();
-    Console::writeLine(static::seekrBrand());
+
 
     static::newRepositoryIfEmpty();
 
@@ -182,6 +167,8 @@ final class Seekr
     }
 
     if ($showResults) {
+      Console::breakLine();
+      Console::writeLine(static::seekrBrand());
       self::seeResults();
     }
   }
@@ -196,11 +183,9 @@ final class Seekr
    */
   public static function seeResults()
   {
-    if (!static::$showOnlyFailures) {
-      foreach (self::successLog() as $testResult) {
-        Console::breakLine();
-        Console::writeLine($testResult->toString());
-      }
+    foreach (self::successLog() as $testResult) {
+      Console::breakLine();
+      Console::writeLine($testResult->toString());
     }
 
     foreach (self::failureLog() as $testResult) {
@@ -221,8 +206,8 @@ final class Seekr
   {
     return sprintf(
       Color::colorize("bg-blue, fg-white, bold", " SUMMARY ")
-        . " " . Color::colorize("bold, underlined", "%d") . " Succeed "
-        . Color::colorize("bold, underlined", "%d") . " Failed\n",
+        . " " . Color::colorize("bold, underlined", "%d") . " passed "
+        . Color::colorize("bold, underlined", "%d") . " failed\n",
       static::$successCount,
       static::$failureCount
     );
