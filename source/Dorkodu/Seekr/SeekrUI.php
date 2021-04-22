@@ -23,11 +23,11 @@ class SeekrUI
   {
     Console::breakLine();
     Console::writeLine(
-      Color::colorize("bold, bg-black, fg-white", " .:: Seekr 1.1 ")
-        . "by Dorkodu"
-        . Color::colorize("bold, bg-black, fg-white", " ::. ")
+      Color::colorize("bold, bg-black, fg-white", " .:: Seekr ::. ")
     );
-    Console::breakLine();
+    Console::writeLine(
+      Color::colorize("bold, bg-black, fg-white", " Simple, Wise Testing for PHP - v1.1 - by Dorkodu et al. ")
+    );
   }
 
   /**
@@ -46,61 +46,6 @@ class SeekrUI
         $successCount,
         $failureCount
       )
-    );
-  }
-
-  /**
-   * @internal toString() for TestResult, will be shown on Seekr CLI UI
-   */
-  public static function stringifyTestResult(TestResult $testResult)
-  {
-    # test name differs between TestFunction and TestCase
-    if ($testResult->isFunctionTest()) {
-      $testName = $testResult->getTest()->description();
-      $successLabel = static::resultBadge($testResult->isSuccess());
-    } else {
-      $ref = new ReflectionClass($testResult->getTestableInstance());
-
-      $testName = sprintf(
-        "%s::%s()",
-        Color::colorize("dim", $ref->getNamespaceName())
-          . Color::colorize("bold", $ref->getShortName()),
-        $testResult->getName()
-      );
-    }
-
-    /**
-     * If a function test, give all stats in a single block
-     */
-    if ($testResult->isFunctionTest()) {
-      return sprintf(
-        "%s %s \n%s\n%s\n%s",
-        $successLabel,
-        $testName,
-        static::generateExceptionOutput($testResult),
-        sprintf(
-          Color::colorize("bold", "Time:") . " %.6fs",
-          $testResult->getExecutionTime(), # get test execution time,
-        ),
-        sprintf(
-          Color::colorize("bold", "Memory Peak:") . " %s",
-          $testResult->getPeakMemoryUsage(), # get test execution time,
-        )
-      );
-    }
-
-    # ✕
-
-    return sprintf(
-      "%s ~ %s %s",
-      $testResult->isSuccess()
-        ? Color::colorize("fg-green", "✓")
-        : Color::colorize("fg-red", "✗"),
-      sprintf(
-        "in %.6fs",
-        $testResult->getExecutionTime(),
-      ),
-      $testResult->getPeakMemoryUsage(),
     );
   }
 
@@ -150,6 +95,61 @@ class SeekrUI
     return $exceptionOutput;
   }
 
+  /**
+   * @internal toString() for TestResult, will be shown on Seekr CLI UI
+   */
+  public static function stringifyTestResult(TestResult $testResult)
+  {
+    # test name differs between TestFunction and TestCase
+    if ($testResult->isFunctionTest()) {
+      $testName = $testResult->getTest()->description();
+      $successLabel = static::resultBadge($testResult->isSuccess());
+    } else {
+      $ref = new ReflectionClass($testResult->getTestableInstance());
+
+      $testName = sprintf(
+        "%s::%s()",
+        Color::colorize("dim", $ref->getNamespaceName())
+          . Color::colorize("bold", $ref->getShortName()),
+        $testResult->getName()
+      );
+    }
+
+    /**
+     * If a function test, give all stats in a single block
+     */
+    if ($testResult->isFunctionTest()) {
+      return sprintf(
+        "%s %s \n%s\n%s\n%s",
+        $successLabel,
+        $testName,
+        static::generateExceptionOutput($testResult),
+        sprintf(
+          Color::colorize("bold", "Time:") . " %.6fs",
+          $testResult->getExecutionTime(), # get test execution time,
+        ),
+        sprintf(
+          Color::colorize("bold", "Memory Peak:") . " %s",
+          $testResult->getPeakMemoryUsage(), # get test execution time,
+        )
+      );
+    }
+
+    # for TestCase test method results
+    return sprintf(
+      "%s %s ~ %s %s",
+      $testResult->isSuccess()
+        ? Color::colorize("fg-green", "✓")
+        : Color::colorize("fg-red", "✗"), # maybe will use this -> ✕ 
+      "",
+      sprintf(
+        "in %.6fs",
+        $testResult->getExecutionTime(),
+      ),
+      $testResult->getPeakMemoryUsage(),
+    );
+  }
+
   public static function printFunctionResult(TestResult $result)
   {
     Console::breakLine();
@@ -162,17 +162,30 @@ class SeekrUI
    * @return void
    * @internal
    */
-  public static function printCaseResult(string $testCaseName, array $resultSet)
+  public static function printCaseResult(array $resultSet)
   {
+    if (empty($resultSet)) {
+      return;
+    }
+
     $onlyFailedResults = array_filter($resultSet, function ($test) {
       return $test->isSuccess();
     });
 
-    $resultBadge = static::resultBadge((count($onlyFailedResults) > 0));
-    $sampleTestResult = $resultSet[0];
-    $sampleTestResult->getTestableInstance();
+    $resultBadge = static::resultBadge((count($onlyFailedResults) === 0));
 
+    $sampleTestResult = $resultSet[0];
+    $ref = new ReflectionClass($sampleTestResult->getTestableInstance());
+    $testCaseNamespace = $ref->getNamespaceName();
+    $testCaseClassName = $ref->getShortName();
+
+    Console::breakLine();
+    Console::writeLine(sprintf("%s %s%s"));
+
+    $totalTime = 0;
+    $peakMemoryUsage = 0;
     foreach ($resultSet as $result) {
+      $totalTime += $result->getExecutionTime();
     }
   }
 }
