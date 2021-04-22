@@ -100,25 +100,13 @@ class SeekrUI
    */
   public static function stringifyTestResult(TestResult $testResult)
   {
-    # test name differs between TestFunction and TestCase
-    if ($testResult->isFunctionTest()) {
-      $testName = $testResult->getTest()->description();
-      $successLabel = static::resultBadge($testResult->isSuccess());
-    } else {
-      $ref = new ReflectionClass($testResult->getTestableInstance());
-
-      $testName = sprintf(
-        "%s::%s()",
-        Color::colorize("dim", $ref->getNamespaceName())
-          . Color::colorize("bold", $ref->getShortName()),
-        $testResult->getName()
-      );
-    }
-
     /**
      * If a function test, give all stats in a single block
      */
     if ($testResult->isFunctionTest()) {
+      $testName = $testResult->getTest()->description();
+      $successLabel = static::resultBadge($testResult->isSuccess());
+
       return sprintf(
         "%s %s \n%s\n%s\n%s",
         $successLabel,
@@ -141,7 +129,7 @@ class SeekrUI
       $testResult->isSuccess()
         ? Color::colorize("fg-green", "✓")
         : Color::colorize("fg-red", "✗"), # maybe will use this -> ✕ 
-      "",
+      $testResult->getTest()->getName(),
       sprintf(
         "in %.6fs",
         $testResult->getExecutionTime(),
@@ -174,18 +162,56 @@ class SeekrUI
 
     $resultBadge = static::resultBadge((count($onlyFailedResults) === 0));
 
-    $sampleTestResult = $resultSet[0];
-    $ref = new ReflectionClass($sampleTestResult->getTestableInstance());
+    $ref = new ReflectionClass($resultSet[0]->getTestableInstance());
     $testCaseNamespace = $ref->getNamespaceName();
     $testCaseClassName = $ref->getShortName();
 
     Console::breakLine();
-    Console::writeLine(sprintf("%s %s%s"));
+    Console::writeLine(sprintf(
+      "%s %s%s",
+      $resultBadge,
+      Color::colorize("dim", $testCaseNamespace),
+      Color::colorize("bold", $testCaseClassName)
+    ));
 
     $totalTime = 0;
-    $peakMemoryUsage = 0;
+    $passedCount = 0;
+    $failedCount = 0;
+
     foreach ($resultSet as $result) {
+      # add to the total execution time
       $totalTime += $result->getExecutionTime();
+
+      # increment test count
+      if ($result->isSuccess())
+        ++$passedCount;
+      else
+        ++$failedCount;
+
+      # print test result
+      Console::writeLine(
+        static::stringifyTestResult($result)
+      );
     }
+
+    Console::writeLine(
+      Color::colorize("bold", "Time :") . sprintf(" %.6fs", $totalTime)
+    );
+
+    Console::writeLine(
+      sprintf(
+        Color::colorize("bold", "Tests : %s%s"),
+        # passed test stats
+        sprintf(
+          Color::colorize("fg-green", "%d passed "),
+          ($passedCount > 0) ?  $passedCount  : ""
+        ),
+        # failed test stats
+        sprintf(
+          Color::colorize("fg-red", "%d failed "),
+          ($failedCount > 0) ?  $passedCount  : ""
+        )
+      )
+    );
   }
 }
