@@ -1,5 +1,8 @@
 <?php
 
+namespace SeekrTests;
+
+use Exception;
 use Dorkodu\Seekr\Say;
 use InvalidArgumentException;
 use Dorkodu\Seekr\Test\TestCase;
@@ -14,13 +17,21 @@ class SampleTest extends TestCase
    */
   public function testOne()
   {
-    echo "This will pass.";
   }
 
   /**
    * This test will fail
    */
   public function testTwo()
+  {
+    echo "This is the output from a failed test";
+    throw new Exception("This is an exception from a failed test.");
+  }
+
+  /**
+   * This test will fail
+   */
+  public function testTwhree()
   {
     echo "This is the output from a failed test";
     throw new Exception("This is an exception from a failed test.");
