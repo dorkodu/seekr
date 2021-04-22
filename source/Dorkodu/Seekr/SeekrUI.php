@@ -159,10 +159,12 @@ class SeekrUI
     }
 
     $onlyFailedResults = array_filter($resultSet, function ($test) {
-      return $test->isSuccess();
+      return !$test->isSuccess();
     });
 
-    $resultBadge = static::resultBadge((count($onlyFailedResults) == 0));
+    $resultBadge = static::resultBadge(
+      empty($onlyFailedResults)
+    );
 
     $ref = new ReflectionClass($resultSet[0]->getTestableInstance());
     $testCaseNamespace = $ref->getNamespaceName();
