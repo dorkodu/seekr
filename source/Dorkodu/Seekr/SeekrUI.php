@@ -158,13 +158,16 @@ class SeekrUI
       return;
     }
 
-    $onlyFailedResults = array_filter($resultSet, function ($test) {
-      return !$test->isSuccess();
-    });
+    # if has any test method which failed, count it.
+    $isTestCaseSucceed = true;
+    foreach ($resultSet as $test) {
+      if (!$test->isSuccess()) {
+        $isTestCaseSucceed = false;
+        break;
+      }
+    }
 
-    $resultBadge = static::resultBadge(
-      empty($onlyFailedResults)
-    );
+    $resultBadge = static::resultBadge($isTestCaseSucceed);
 
     $ref = new ReflectionClass($resultSet[0]->getTestableInstance());
     $testCaseNamespace = $ref->getNamespaceName();
