@@ -233,7 +233,7 @@ final class Seekr
   public static function seeResults()
   {
     foreach (static::$log['cases'] as $testCaseName => $resultSet) {
-      SeekrUI::printCaseResult($testCaseName, $resultSet);
+      SeekrUI::printCaseResult($resultSet);
     }
 
     foreach (static::$log['callbacks'] as $result) {
