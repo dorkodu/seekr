@@ -15,6 +15,7 @@ use Dorkodu\Utils\Color;
 use Dorkodu\Utils\Console;
 
 use Closure;
+use Dorkodu\Utils\Timer;
 use ReflectionClass;
 use Exception;
 
@@ -28,6 +29,10 @@ use Exception;
  */
 final class Seekr
 {
+
+  /** @var float $version */
+  public static $version = 1.1;
+
   /**
    * Current test repository to be run
    * @var TestRepository|null
@@ -147,27 +152,26 @@ final class Seekr
   {
     static::newRepositoryIfEmpty();
 
+    $performanceProfiler = new PerformanceProfiler(6, 2);
+    $performanceProfiler->start();
+    # run test cases
     foreach (static::$repo->testCases() as $test) {
       self::handleTestCase($test);
     }
 
+    # run test functions
     foreach (static::$repo->testFunctions() as $test) {
       self::handleTestFunction($test);
     }
 
+    # if wants to show results
     if ($showResults) {
-      Console::breakLine();
-      Console::writeLine(static::seekrBrand());
+      SeekrUI::brand();
       self::seeResults();
     }
   }
 
-  private static function seekrBrand()
-  {
-    return Color::colorize("bold, bg-black, fg-white", " Seekr - Simple, Wise Testing for PHP ");
-  }
-
-  private static function generateExceptionOutput(TestResult $testResult)
+  public static function exceptionOutput(TestResult $testResult)
   {
     $exceptionOutput = "";
 
@@ -213,45 +217,14 @@ final class Seekr
     return $exceptionOutput;
   }
 
-  /**
-   * @internal toString() for TestResult, will be shown on Seekr CLI UI
-   */
-  private static function stringifyTestResult(TestResult $testResult)
+  private static function testCaseLog()
   {
+    return static::$log['cases'];
+  }
 
-    $successLabel = $testResult->isSuccess()
-      ? Color::colorize("bold, fg-white, bg-green", ' PASS ')
-      : Color::colorize("bold, fg-white, bg-red", ' FAIL ');
-
-    # test name differs between TestFunction and TestCase
-    if ($testResult->isFunctionTest()) {
-      $testName = $testResult->getTest()->description();
-    } else {
-      $ref = new ReflectionClass($testResult->getTestableInstance());
-
-      $testName = sprintf(
-        "%s::%s()",
-        Color::colorize("dim", $ref->getNamespaceName())
-          . Color::colorize("bold", $ref->getShortName()),
-        $testResult->getName()
-      );
-    }
-
-    # returns the error log
-    return sprintf(
-      "%s %s \n%s\n%s %s",
-      $successLabel,
-      $testName,
-      static::generateExceptionOutput($testResult),
-      sprintf(
-        Color::colorize("bold", "Time:") . " %.6fs",
-        $testResult->getExecutionTime(), # get test execution time,
-      ),
-      sprintf(
-        Color::colorize("bold", "Memory Peak:") . " %s",
-        $testResult->getPeakMemoryUsage(), # get test execution time,
-      )
-    );
+  private static function testFunctionLog()
+  {
+    return static::$log['callbacks'];
   }
 
   /**
@@ -260,20 +233,11 @@ final class Seekr
   public static function seeResults()
   {
     foreach (static::$log['cases'] as $testCaseName => $resultSet) {
-
-      $filteredResults = array_filter($resultSet, function ($result) {
-        # code...
-      });
-
-      foreach ($resultSet as $result) {
-      }
-      Console::breakLine();
-      Console::writeLine(static::stringifyTestResult($result));
+      SeekrUI::printCaseResult($testCaseName, $resultSet);
     }
 
     foreach (static::$log['callbacks'] as $result) {
-      Console::breakLine();
-      Console::writeLine(self::stringifyTestResult($result));
+      SeekrUI::printFunctionResult($result);
     }
 
     static::summary();
@@ -286,16 +250,7 @@ final class Seekr
    */
   public static function summary()
   {
-    Console::breakLine();
-    Console::writeLine(
-      sprintf(
-        Color::colorize("bg-blue, fg-white, bold", " SUMMARY ")
-          . " " . Color::colorize("bold, underlined", "%d") . " passed "
-          . Color::colorize("bold, underlined", "%d") . " failed\n",
-        static::$successCount,
-        static::$failureCount
-      )
-    );
+    SeekrUI::summary(static::$successCount, static::$failureCount);
   }
 
   /**
@@ -336,7 +291,6 @@ final class Seekr
 
     self::log($result);
   }
-
 
   /**
    * @internal
