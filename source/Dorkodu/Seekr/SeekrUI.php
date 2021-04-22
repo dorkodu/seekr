@@ -18,4 +18,12 @@ class SeekrUI
       ? Color::colorize("bold, fg-white, bg-green", ' PASS ')
       : Color::colorize("bold, fg-white, bg-red", ' FAIL ');
   }
+
+  public static function brand()
+  {
+    Console::breakLine();
+    Console::writeLine(
+      Color::colorize("bold, bg-black, fg-white", " .:: Seekr 1.1 ::. ")
+    );
+  }
 }
