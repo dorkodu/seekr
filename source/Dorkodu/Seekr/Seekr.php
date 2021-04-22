@@ -143,17 +143,31 @@ final class Seekr
   }
 
   /**
+   * @internal 
+   */
+  private static function isSetting($variable, $value)
+  {
+    return isset($variable)
+      && !empty($variable)
+      && $variable === $value;
+  }
+
+  /**
    * Runs the tests.
    *
-   * @param boolean $showResults If you set this to false, Seekr will NOT output the results.
+   * @param array $setting You can give a few settings for Seekr.
+   * 'hideResults' -> set this to a boolean.
+   * 'detailedOutput' -> set this to a boolean.
    * @return void
    */
-  public static function run($showResults = true)
+  public static function run(array $setting = array())
   {
+    ob_start();
     static::newRepositoryIfEmpty();
 
     $performanceProfiler = new PerformanceProfiler(6, 2);
     $performanceProfiler->start();
+
     # run test cases
     foreach (static::$repo->testCases() as $test) {
       self::handleTestCase($test);
@@ -164,11 +178,16 @@ final class Seekr
       self::handleTestFunction($test);
     }
 
-    # if wants to show results
-    if ($showResults) {
-      SeekrUI::brand();
+    SeekrUI::brand();
+
+    # if user wants to see results
+    if (static::isSetting($setting['hideResults'], true)) {
       self::seeResults();
     }
+
+    static::summary();
+
+    ob_end_flush();
   }
 
   public static function exceptionOutput(TestResult $testResult)
@@ -239,8 +258,6 @@ final class Seekr
     foreach (static::$log['callbacks'] as $result) {
       SeekrUI::printFunctionResult($result);
     }
-
-    static::summary();
   }
 
   /**
