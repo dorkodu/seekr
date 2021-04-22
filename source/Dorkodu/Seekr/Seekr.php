@@ -62,7 +62,7 @@ final class Seekr
 
   private static function newRepositoryIfEmpty()
   {
-    if (!(static::$repo instanceof TestRepository) || is_null(static::$repo)) {
+    if (!(static::$repo instanceof TestRepository)) {
       static::$repo = new TestRepository();
     }
   }
