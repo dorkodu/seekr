@@ -336,7 +336,11 @@ final class Seekr
       $methodname = $method->getName();
 
       # if this is a test method, mount it !
-      if (strlen($methodname) > 4 && substr($methodname, 0, 4) == 'test') {
+      if (
+        strlen($methodname) > 4
+        && substr($methodname, 0, 4) == 'test'
+        && $method->isPublic()
+      ) {
 
         # HOOK mountedTest()
         $case->mountedTest();
