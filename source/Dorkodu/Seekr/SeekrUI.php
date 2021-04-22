@@ -48,4 +48,50 @@ class SeekrUI
       )
     );
   }
+
+  private static function generateExceptionOutput(TestResult $testResult)
+  {
+    $exceptionOutput = "";
+
+    if (!$testResult->isSuccess()) {
+
+      $resultException = $testResult->getException();
+
+      if ($resultException instanceof Contradiction) {
+        $exceptionMessage = $resultException->toString();
+      } else {
+
+        $exceptionMessage =
+          Color::colorize("bold, underlined, fg-red", "Exception")
+          . sprintf(" %s", $resultException->getMessage());
+      }
+
+      $testOutput = empty($testResult->getOutput())
+        ? ""
+        : sprintf(
+          "" . Color::colorize("bold, underlined, fg-yellow", "Output") . "\n%s",
+          $testResult->getOutput()
+        );
+
+      $startLine = $testResult->getException()->getLine();
+      $filePath = $testResult->getException()->getFile();
+
+      $exceptionMetadata = sprintf(
+        "at %s:%s",
+        Color::colorize("fg-green", $filePath),
+        Color::dim(
+          Color::colorize("bold, fg-green", sprintf("%d", $startLine))
+        )
+      );
+
+      $exceptionOutput = sprintf(
+        "%s\n%s\n%s",
+        $exceptionMetadata,
+        $exceptionMessage,
+        $testOutput
+      );
+    }
+
+    return $exceptionOutput;
+  }
 }
