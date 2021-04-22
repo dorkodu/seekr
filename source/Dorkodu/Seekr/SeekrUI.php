@@ -23,10 +23,12 @@ class SeekrUI
   {
     Console::breakLine();
     Console::writeLine(
-      Color::colorize("bold, bg-black, fg-white", " .:: Seekr ::. ")
+      Color::colorize("bold", " .:: Seekr ::. ")
     );
     Console::writeLine(
-      Color::colorize("bold, bg-black, fg-white", " Simple, Wise Testing for PHP - v1.1 - by Dorkodu et al. ")
+      Color::colorize("bold", " Simple, Wise Testing for PHP - "
+        . Seekr::$version
+        . " - by Dorkodu. ")
     );
   }
 
@@ -69,7 +71,7 @@ class SeekrUI
       $testOutput = empty($testResult->getOutput())
         ? ""
         : sprintf(
-          "" . Color::colorize("bold, underlined, fg-yellow", "Output") . "\n%s",
+          "" . Color::colorize("bold, underlined, dim, fg-yellow", "Output") . "\n%s",
           $testResult->getOutput()
         );
 
@@ -85,9 +87,9 @@ class SeekrUI
       );
 
       $exceptionOutput = sprintf(
-        "%s\n%s\n%s",
-        $exceptionMetadata,
+        "\n%s\n%s\n%s",
         $exceptionMessage,
+        $exceptionMetadata,
         $testOutput
       );
     }
@@ -108,7 +110,7 @@ class SeekrUI
       $successLabel = static::resultBadge($testResult->isSuccess());
 
       return sprintf(
-        "%s %s \n%s\n%s\n%s",
+        "%s %s %s\n%s\n%s",
         $successLabel,
         $testName,
         static::generateExceptionOutput($testResult),
@@ -127,9 +129,9 @@ class SeekrUI
     return sprintf(
       "%s %s ~ %s %s",
       $testResult->isSuccess()
-        ? Color::colorize("fg-green", "✓")
-        : Color::colorize("fg-red", "✗"), # maybe will use this -> ✕ 
-      $testResult->getTest()->getName(),
+        ? Color::colorize("bold, fg-green", "✓")
+        : Color::colorize("bold, fg-red", "✕"), # maybe will use this ->  
+      Color::colorize("bold", $testResult->getTest()->getName()),
       sprintf(
         "in %.6fs",
         $testResult->getExecutionTime(),
@@ -160,7 +162,7 @@ class SeekrUI
       return $test->isSuccess();
     });
 
-    $resultBadge = static::resultBadge((count($onlyFailedResults) === 0));
+    $resultBadge = static::resultBadge((count($onlyFailedResults) == 0));
 
     $ref = new ReflectionClass($resultSet[0]->getTestableInstance());
     $testCaseNamespace = $ref->getNamespaceName();
@@ -194,6 +196,7 @@ class SeekrUI
       );
     }
 
+    Console::breakLine();
     Console::writeLine(
       Color::colorize("bold", "Time :") . sprintf(" %.6fs", $totalTime)
     );
@@ -202,15 +205,13 @@ class SeekrUI
       sprintf(
         Color::colorize("bold", "Tests : %s%s"),
         # passed test stats
-        sprintf(
-          Color::colorize("fg-green", "%d passed "),
-          ($passedCount > 0) ?  $passedCount  : ""
-        ),
+        ($passedCount > 0)
+          ? sprintf(Color::colorize("bold, fg-green", "%d passed "), $passedCount)
+          : "",
         # failed test stats
-        sprintf(
-          Color::colorize("fg-red", "%d failed "),
-          ($failedCount > 0) ?  $passedCount  : ""
-        )
+        ($failedCount > 0)
+          ? sprintf(Color::colorize("bold, fg-red", "%d failed"), $failedCount)
+          : "",
       )
     );
   }
