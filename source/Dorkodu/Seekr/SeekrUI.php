@@ -94,4 +94,30 @@ class SeekrUI
 
     return $exceptionOutput;
   }
+
+  public static function printFunctionResult(TestResult $result)
+  {
+    Console::breakLine();
+    Console::writeLine(static::stringifyTestResult($result));
+  }
+
+  /**
+   * @param string $testCaseName
+   * @param TestResult[] $resultSet
+   * @return void
+   * @internal
+   */
+  public static function printCaseResult(string $testCaseName, array $resultSet)
+  {
+    $onlyFailedResults = array_filter($resultSet, function ($test) {
+      return $test->isSuccess();
+    });
+
+    $resultBadge = static::resultBadge((count($onlyFailedResults) > 0));
+    $sampleTestResult = $resultSet[0];
+    $sampleTestResult->getTestableInstance();
+
+    foreach ($resultSet as $result) {
+    }
+  }
 }
