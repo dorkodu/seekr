@@ -20,7 +20,6 @@ use function trim;
 
 /**
  * Color - A util class for styling text on Terminal environment using ANSI codes.
- * Difficulty = Hardcore
  * 
  * @author     Doruk Eray (@dorkodu) <doruk@dorkodu.com>
  * @copyright  (c) 2021, Doruk Eray
