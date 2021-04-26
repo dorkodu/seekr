@@ -15,7 +15,7 @@ class AnotherTest extends TestCase
   /**
    * This test will pass
    */
-  private function testWillPass()
+  public function testWillPass()
   {
     echo "This will pass.";
   }
