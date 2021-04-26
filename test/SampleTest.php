@@ -31,7 +31,7 @@ class SampleTest extends TestCase
   /**
    * This test will fail
    */
-  public function testTwhree()
+  public function testThree()
   {
     echo "This is the output from a failed test";
     throw new Exception("This is an exception from a failed test.");
