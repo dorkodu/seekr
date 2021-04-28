@@ -1,17 +1,41 @@
 # Seekr ~ Change Log
 
-### 1.0.0 Stability Expectations
+### 1.1.0 (April 28 , 2021)
 
 ---
 
-- Seekr will be able to be used on production.<br>It will have enough features to be a minimalistic testing library.<br>It gives developers a few useful way which they can write and run tests locally. Easily and fast!<br>
-- It will have a stable `Say` helper class which provides useful ready-to-go premises to developers. <br>People can use them to simplify their code. Work for `Say` is in progress, and seems to always be ;)
+- Seekr has a stable **`Say`** and **`Constraint`** helper classes which provide useful ready-to-go, shorthand *premises* (assertions) and *boolean statements* for you. <br>You can use them to simplify your code. We will continue adding useful premises.
+
+### 1.0.0 (April 23, 2021)
+
+---
+
+- **`STABLE`** Seekr is now production-ready! 
+
+- Seekr is now a separate library from your test cases. 
+
+- Changed the API.
+
+- **`REWRITE`**
+
+  - Rewrote the whole library from scratch with what I learned through the journey.<br>I approached the concept from first principles.
+  - Designed a better and cooler logo :)
+
+  - Simplified and decoupled some units.
+  - Fixed inconsistencies
+  - Removed some unnecessary internal code
+
+- **`NEW`** You can add & run functional tests, by giving a description and a callback.
+
+- **`NEW`** Add `TestCase`, which your test classes can extend.
+
+- **`NEW`** Seekr's CLI UI is changed. <br>Colorful, distraction-free, easy-to-use.
 
 ### 0.6.0 (January 24, 2021)
 
 ---
 
-- **NEW !** Add Life Cycle Hooks.
+- **`NEW`** Add Life Cycle Hooks.
   - A life cycle hook is a method that can be implemented in your test class and will be run on specific times while executing your tests.
   - These are current life cycle hooks for a test environment :
     - `setUp()` :  Called before starting to run tests in a test class
@@ -23,7 +47,7 @@
 
 ---
 
-- **RENAMED** the library :  ~~Outkicker~~ to **Seekr**
+- **`RENAME`**  ~~Outkicker~~ to **Seekr**
 
 - Designed a logo after renaming the library.<br>
 
@@ -31,9 +55,8 @@
 
   **Seekr**<br>"Seeking more efficient and accurate tests in your code<br> while preventing potential bugs, inconsistencies fast, simply and wisely."
 
-- **REWRITE**
+- **`REWRITE`**
 
-  - Rewrote the whole library from scratch with what I learned through the journey.<br>I approached the concept from first principles.
   - Fixed inconsistencies
   - Simplified and decoupled some units.
   - Removed some unnecessary internal code
@@ -42,7 +65,7 @@
 
 ---
 
-- **NEW !**  Add `Premise` class to let users write their own premises and evaluate them.
+- **`NEW`**  Add `Premise` class to let users write their own premises and evaluate them.
   - Give a statement which can be evaluated and resolved into a boolean value.
   - Give a message and code describing a unique Contradiction type.<br>No more unnecessary abstractions for every `Exception` or `Contradiction` type.<br>For example : You can write Contradiction creator functions to throw different type of contradictions by only changing the arguments. Simple, right?
 - Decoupled proposing a `Premise` process from `Say` . Now anyone can write their own premises if they can't find what they need in  `Say` helper class. You no longer need to wait until we release a new version.
@@ -51,7 +74,7 @@
 
 ---
 
-- **NEW !** Add `Timer` class to show how much it takes to run each test.
+- **`NEW`** Add `Timer` class to show how much it takes to run each test.
 - Updated output for the sake of aesthetics
 
 ### 0.2.1 (January 21, 2021)
