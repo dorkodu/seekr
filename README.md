@@ -4,43 +4,43 @@
 
 ## What?
 
-Seekr is a simple testing library that is for writing better tests easily and wisely on PHP. <br>Seekr is independent from any ecosystem or framework. So anyone can use it in their code.
+Seekr is an awesome testing library for writing ***better*** tests ***easily*** and ***wisely*** on ***PHP***. <br>Seekr is independent from any ecosystem or framework. So anyone can use it in their code.
 
 ## Why?
 
-Because I found TDD a little hard. Behavior Driven Development sound much easier and made sense to me. <br>So, instead of spending days to figure out **how to write tests**, **how to integrate them with my existing code**, **how to set up a "build pipeline" ;** I created a simple and minimalistic PHP testing library to write more ***wisely, accurate, efficient*** tests in my code.
+Because I found the strict, formal TDD way and other test frameworks *a little hard and not approachable* by beginners. Developing a new way *minimalist* library sound much easier and made sense to me. I sat down and re-thought the philosophy behind testing. And decided on the core values to provide by testing. The result is better for small and medium size projects.
+
+So, instead of spending days to figure out **configuration, test integration, writing tests and being able to see organized results**; I created this simple but awesome PHP testing library to write ***wisely, accurate, efficient*** tests.
 
 ## How?
 
-Simple. There are two different ways, use which you like.
+Simple. There are *two* different testing approaches, use which way is appropriate for your code.
 
-1. You can write function tests, by giving a callback and a description
-2. You can write test classes using *TestCase*<br>Create a class for your tests. Extend *TestCase*.<br>Write test methods and start their name with 'test', like **testFoo**, **testBar** etc.<br>Then create an instance of that class. Add it to your TestRepository.<br>You are ready to go!
+1. ***You can write single function tests, by giving a callback and a description***
+2. ***You can write test classes using TestCase***<br>Create a class for your tests. Extend *TestCase*.<br>Write test methods and start their name with *'test'*, like **testFoo**, **testBar** etc.<br>Then create an instance of that class. Add it to your TestRepository.<br>You are ready to go!
 
-If you want to see beautified results, we dictate using console with PHP CLI from Terminal.
+If you want to see beautiful results, we dictate using console with *PHP CLI* from Terminal.
 
-Write  `Seekr::run()` to run tests. <br>This will run each of your test methods & functions and create a TestResult for each. <br>These result objects are stored in Seekr's `static::$log` property. <br>
+If your test function (and *TestCase* method) throws an exception, it is considered failing.<br>Otherwise it passes.
 
-There are a few more advanced features of Seekr. <br>If you like it, you can take a look on them too :smile:
+**`Seekr::run()`** to run tests. <br>This will run each of your test methods & functions and create a TestResult for each. <br>These result objects are stored in Seekr’s private static property. <br>
 
-### It has a few components :
-
-- **Seekr :** The library’s singleton. Use `Seekr` class to run and manage your tests.
-- **TestRepository** : You add your *TestCase*s and functional tests to a repository, so you can run multiple tests at the same time. 
-- **TestCase :** The base for testable classes. Any class that extends *TestCase*, can be used as as a test class.
-- **Say :** Provides useful assertions for your tests. Optional to use.
-- **Constraint :** Provides useful boolean statements for your tests. Optional to use.
-- **TestResult :** An object for representing test results. <br>This can be logged, inspected and tracked. Useful abstraction :)
-- **Premise :** With that, everyone can create their own premises using `Premise::propose()`. <br>A premise throws a Contradiction in case that statement is evaluated and is equal to false.<br>This is considered an exception and Seekr marks this test as a failure. Otherwise it is succeed.
-- **Contradiction :** An object for representing `Premise` exceptions.
+There are a few more advanced features of Seekr. <br>If you like it, you can take a look on them too :)
 
 ### Here is a sample :
 
-- Create your test class. Test method names must start with "**test**". <br>When they throw an exception, Seekr will handle it :)
+- #### Create your test class. 
 
+  Test method names must start with "**test**" and be longer than 4 characters, so you can’t name your test methods as **“test”**. When they throw an exception, Seekr will handle it automaticly :)
+  
+  **SampleTest.php**
+  
   ```php
   <?php
-    
+  
+  namespace SeekrTests;
+  
+  use Exception;
   use Dorkodu\Seekr\Test\TestCase;
   
   /**
@@ -49,70 +49,143 @@ There are a few more advanced features of Seekr. <br>If you like it, you can tak
   class SampleTest extends TestCase
   {
     /**
-     * This test is empty
-     */
-    public function testEmpty()
-    {
-    }
-  
-    /**
-     * This test is designed to pass
+     * An empty test will pass
      */
     public function testOne()
     {
-      echo "hello";
     }
   
     /**
-     * This test is designed to fail
+     * This test will pass
      */
     public function testTwo()
     {
-      throw new Exception("Unknown Exception", 1);
+      echo "This test just prints something. So will pass.";
+    }
+  
+    /**
+     * This test will fail
+     */
+    public function testThree()
+    {
+      echo "This is the output from a failed test";
+      throw new Exception("This is an exception from a failed test.");
     }
   }
   
   ```
   
-- **Run your tests.**<br>We suggest you to write a single endpoint file for adding your tests and running them with Seekr, but you should define them somewhere else, just for the sake of managebility. 
+- #### Create your test functions
 
-  **Here is an example :**
+  *A test function* **=** *description* **+** *callback*
+
+  **function-tests.php**
 
   ```php
   <?php
+  
   /**
    * We used Loom dependency utility for autoloading, 
    * but you probably use Composer. Doesn't matter :)
-   */ 
+   */
+  require "loot/loom-weaver.php";
+  
+  use Dorkodu\Seekr\Seekr;
+  
+  /**
+   * You can also write functional tests 
+   * by giving a description and a callback 
+   */
+  Seekr::test("a failing test callback.", function () {
+    echo "This is the output of a failed test.";
+    throw new Exception("This is an exception from a failed test.");
+  });
+  
+  Seekr::test("a passing test callback.", function () {
+    echo "This test will pass :)";
+  });
+  
+  ```
+
+- #### **Run your tests.**
+
+  We suggest you to write a single endpoint file for adding your tests and running them with Seekr, but you should define them somewhere else, just for the sake of managebility. It’s just a best-practice. 
+
+  **Here is a sample entry file for Seekr :**
+
+  **test.php**
+
+  ```php
+  <?php
+  
+  /**
+   * We used Loom utility for autoloading,
+   * but you probably use Composer. It doesn't matter :)
+   */
   require "loot/loom-weaver.php";
   
   # this is the test file
   require_once "SampleTest.php";
+  require_once "AnotherTest.php";
+  
+  /*
+   * We wrote functional tests to another file,
+   * to make managing tests easy.
+   */
+  require_once "function-tests.php";
   
   use Dorkodu\Seekr\Seekr;
-  use Joke\SampleTest;
+  use SeekrTests\SampleTest;
+  use SeekrTests\AnotherTest;
   
   # You can add a test case class by giving an instance of it.
   Seekr::testCase(new SampleTest());
-  
-  # You can also write functional tests by giving a description and a callback 
-  Seekr::test("a simple test callback.", function () {
-    throw new Exception("This is an exception by");
-  });
+  Seekr::testCase(new AnotherTest());
   
   # Run Seekr
   Seekr::run();
-  ```
-
-- Get the execution result in output, looks better if you use CLI
-
-  ```bash
+  
   
   ```
 
-### Advanced :
+  Get the execution result in output, looks better if you use CLI.
 
-#### Hooks
+  - Each *TestCase*‘s passing state is determined by all of the test methods it contains.<br>
+
+  - When an exception occurs, your test is considered failing.<br>Seekr will show both exception message and output. <br>Also for every test Seekr tells the execution time in seconds and the peak memory usage.
+
+      #### Results on a dark-theme terminal :
+
+  <img src="assets/sample-test-results-dark.jpg" style="border-radius: 1%">
+
+  #### Results on a light-theme terminal :
+
+  <img src="assets/sample-test-results-light.jpg" style="border-radius: 2%">
+
+## Advanced Use
+
+### Settings
+
+There are some settings you can set while using Seekr.<br>We wanted to give you customization chance we actually wanted.
+
+- **`hideResults` :**  Will only show the summary.<br>Set to boolean, default : *false*
+- **`hideHeader` :** Won’t show the header (Seekr brand and copyright statement on Terminal).<br>For real minimalists, anti-distraction made simpler :)<br>Set to boolean, default : *false*
+- **`detailed` :** Will show details such as time and memory on TestCase method results. <br>Set to boolean, default : *false*
+
+```php
+...
+  
+/*
+ * Give settings array to run method. Each is optional. 
+ * Seekr works even if you don't set any of them.
+ */
+Seekr::run([
+  'detailed' => true,
+  'hideHeader' => true
+]);
+```
+
+### Hooks
 
 You can implement life cycle hooks to catch up with execution steps of tests :<br>These are current life cycle hooks for a test environment :
 
@@ -132,13 +205,14 @@ class SampleTest extends TestCase
   {
     echo "This is the setUp hook!";
   }
+...
 ```
 
 ## Author
 
-Doruk Dorkodu : [GitHub](https://github.com/dorukdorkodu)  | [Twitter](https://twitter.com/dorukdorkodu) | [doruk@dorkodu.com](mailto:doruk@dorkodu.com) | [dorkodu.com](https://dorkodu.com)
+Doruk Eray : [GitHub](https://github.com/dorukdorkodu)  | [Twitter](https://twitter.com/dorkodu) | [doruk@dorkodu.com](mailto:doruk@dorkodu.com) | [dorkodu.com](https://dorkodu.com)
 
-See also the list of [contributions](https://libre.dorkodu.com) that we are making at [Dorkodu](dorkodu.com) to the free software community.
+See also the list of [contributions](https://libre.dorkodu.com) that we are making at [Dorkodu](https://dorkodu.com) to the free software community.
 
 ## License
 
