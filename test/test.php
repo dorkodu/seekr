@@ -24,6 +24,4 @@ Seekr::testCase(new SampleTest());
 Seekr::testCase(new AnotherTest());
 
 # Run Seekr
-Seekr::run([
-  'hideResults' => true
-]);
+Seekr::run();
