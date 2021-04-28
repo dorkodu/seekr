@@ -45,11 +45,23 @@ class SeekrUI
 
     Console::writeLine(
       sprintf(
-        Color::colorize("bg-blue, fg-white, bold", " SUMMARY ")
-          . " " . Color::colorize("bold, underlined, fg-green", "%d") . Color::colorize("bold", " passed ")
-          . Color::colorize("bold, underlined, fg-red", "%d") . Color::colorize("bold", " failed"),
-        $successCount,
-        $failureCount
+        Color::colorize("bg-blue, fg-white, bold", " SUMMARY ") . " %s %s",
+
+        # passed test stats
+        ($successCount > 0)
+          ? sprintf(
+            Color::colorize("bold, underlined, fg-green", "%d") . Color::colorize("bold", " passed"),
+            $successCount
+          )
+          : "",
+
+        # failed test stats
+        ($failureCount > 0)
+          ? sprintf(
+            Color::colorize("bold, underlined, fg-red", "%d") . Color::colorize("bold", " failed"),
+            $failureCount
+          )
+          : "",
       )
     );
 
@@ -118,7 +130,7 @@ class SeekrUI
   /**
    * @internal toString() for TestResult, will be shown on Seekr CLI UI
    */
-  public static function stringifyTestResult(TestResult $testResult, bool $showDetails = false)
+  public static function stringifyTestResult(TestResult $testResult, bool $detailedOutput = false)
   {
     /**
      * If a function test, give all stats in a single block
@@ -143,7 +155,7 @@ class SeekrUI
       );
     }
 
-    $testMethodDetails = $showDetails ?
+    $testMethodDetails = $detailedOutput ?
       sprintf(
         "~ in %.6f seconds ~ %s",
         $testResult->getExecutionTime(),
@@ -157,15 +169,15 @@ class SeekrUI
       $testResult->isSuccess()
         ? Color::colorize("bold, fg-green", "✓")
         : Color::colorize("bold, fg-red", "✕"), # maybe will use this ->  
-      $testResult->getTest()->getName(),
+      Color::colorize("bold", $testResult->getTest()->getName()),
       $testMethodDetails
     );
   }
 
-  public static function printFunctionResult(TestResult $result)
+  public static function printFunctionResult(TestResult $result, bool $detailedOutput = false)
   {
     Console::breakLine();
-    Console::writeLine(static::stringifyTestResult($result));
+    Console::writeLine(static::stringifyTestResult($result, $detailedOutput));
   }
 
   /**
@@ -174,7 +186,7 @@ class SeekrUI
    * @return void
    * @internal
    */
-  public static function printCaseResult(array $resultSet, bool $showDetails = false)
+  public static function printCaseResult(array $resultSet, bool $detailedOutput = false)
   {
     if (empty($resultSet)) {
       return;
@@ -223,7 +235,7 @@ class SeekrUI
 
       # print test result
       Console::writeLine(
-        static::stringifyTestResult($result)
+        static::stringifyTestResult($result, $detailedOutput)
       );
     }
 
