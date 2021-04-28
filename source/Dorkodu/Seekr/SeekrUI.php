@@ -22,13 +22,15 @@ class SeekrUI
   public static function brand()
   {
     Console::breakLine();
+
     Console::writeLine(
       Color::colorize("bold", " .:: Seekr ::. ")
     );
+
     Console::writeLine(
-      Color::colorize("bold", " Simple, Wise Testing for PHP - "
+      Color::colorize("bold", " Simple, Wise Testing for PHP - v"
         . Seekr::$version
-        . " - by Dorkodu. ")
+        . " - (c) Dorkodu. ")
     );
   }
 
@@ -37,18 +39,35 @@ class SeekrUI
    *
    * @return void
    */
-  public static function summary(int $successCount, int $failureCount)
+  public static function summary(int $successCount, int $failureCount, $timePassed, $memoryPeak)
   {
     Console::breakLine();
+
     Console::writeLine(
       sprintf(
         Color::colorize("bg-blue, fg-white, bold", " SUMMARY ")
-          . " " . Color::colorize("bold, underlined", "%d") . " passed "
-          . Color::colorize("bold, underlined", "%d") . " failed\n",
+          . " " . Color::colorize("bold, underlined, fg-green", "%d") . Color::colorize("bold", " passed ")
+          . Color::colorize("bold, underlined, fg-red", "%d") . Color::colorize("bold", " failed"),
         $successCount,
         $failureCount
       )
     );
+
+    Console::writeLine(
+      sprintf(
+        Color::colorize("bold", "Time:") . " %.6fs",
+        (float) $timePassed # get test execution time
+      )
+    );
+
+    Console::writeLine(
+      sprintf(
+        Color::colorize("bold", "Memory Peak:") . " %s",
+        $memoryPeak # get test memory peak
+      )
+    );
+
+    Console::breakLine();
   }
 
   private static function generateExceptionOutput(TestResult $testResult)
@@ -62,7 +81,6 @@ class SeekrUI
       if ($resultException instanceof Contradiction) {
         $exceptionMessage = $resultException->toString();
       } else {
-
         $exceptionMessage =
           Color::colorize("bold, underlined, fg-red", "Exception")
           . sprintf(" %s", $resultException->getMessage());
@@ -100,7 +118,7 @@ class SeekrUI
   /**
    * @internal toString() for TestResult, will be shown on Seekr CLI UI
    */
-  public static function stringifyTestResult(TestResult $testResult)
+  public static function stringifyTestResult(TestResult $testResult, bool $showDetails = false)
   {
     /**
      * If a function test, give all stats in a single block
@@ -125,18 +143,22 @@ class SeekrUI
       );
     }
 
+    $testMethodDetails = $showDetails ?
+      sprintf(
+        "~ in %.6f seconds ~ %s",
+        $testResult->getExecutionTime(),
+        $testResult->getPeakMemoryUsage()
+      )
+      : "";
+
     # for TestCase test method results
     return sprintf(
-      "%s %s ~ %s %s",
+      "%s %s %s",
       $testResult->isSuccess()
         ? Color::colorize("bold, fg-green", "✓")
         : Color::colorize("bold, fg-red", "✕"), # maybe will use this ->  
-      Color::colorize("bold", $testResult->getTest()->getName()),
-      sprintf(
-        "in %.6fs",
-        $testResult->getExecutionTime(),
-      ),
-      $testResult->getPeakMemoryUsage(),
+      $testResult->getTest()->getName(),
+      $testMethodDetails
     );
   }
 
@@ -152,7 +174,7 @@ class SeekrUI
    * @return void
    * @internal
    */
-  public static function printCaseResult(array $resultSet)
+  public static function printCaseResult(array $resultSet, bool $showDetails = false)
   {
     if (empty($resultSet)) {
       return;
@@ -174,10 +196,14 @@ class SeekrUI
     $testCaseClassName = $ref->getShortName();
 
     Console::breakLine();
+
     Console::writeLine(sprintf(
       "%s %s%s",
       $resultBadge,
-      Color::colorize("dim", $testCaseNamespace),
+      Color::colorize(
+        "dim",
+        empty($testCaseNamespace) ? "" : $testCaseNamespace . "\\"
+      ),
       Color::colorize("bold", $testCaseClassName)
     ));
 
@@ -202,13 +228,10 @@ class SeekrUI
     }
 
     Console::breakLine();
-    Console::writeLine(
-      Color::colorize("bold", "Time :") . sprintf(" %.6fs", $totalTime)
-    );
 
     Console::writeLine(
       sprintf(
-        Color::colorize("bold", "Tests : %s%s"),
+        Color::colorize("bold", "Tests: %s%s"),
         # passed test stats
         ($passedCount > 0)
           ? sprintf(Color::colorize("bold, fg-green", "%d passed "), $passedCount)
@@ -218,6 +241,10 @@ class SeekrUI
           ? sprintf(Color::colorize("bold, fg-red", "%d failed"), $failedCount)
           : "",
       )
+    );
+
+    Console::writeLine(
+      Color::colorize("bold", "Time:") . sprintf(" %.6fs", $totalTime)
     );
   }
 }
