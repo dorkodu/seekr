@@ -61,7 +61,7 @@ class Timer
         return time() - $this->beginTimestamp;
       }
     } else {
-      return 0;
+      return 0.00;
     }
   }
 }
