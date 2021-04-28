@@ -197,7 +197,7 @@ final class Seekr
    *
    * @param array $setting You can make a few choices on how should Seekr run your tests.\
    * "hideResults" : Only will Boolean. Defaults to false.\
-   * "detailedOutput" : Will show details on each of your TestCase methods. Boolean, defaults to false.\
+   * "detailed" : Will show details on each of your TestCase methods. Boolean, defaults to false.\
    * "hideHeader" : Won't show Seekr brand header if set to true. Boolean, defaults to false.\
    * 
    * @return void
@@ -226,7 +226,9 @@ final class Seekr
 
     # if user wants to see results
     if (!static::getSetting('hideResults', false)) {
-      self::seeResults();
+      self::seeResults(
+        static::getSetting('detailed', false)
+      );
     }
 
     static::summary();
@@ -296,7 +298,7 @@ final class Seekr
   public static function seeResults(bool $showDetails = false)
   {
     foreach (static::$log['cases'] as $testCaseName => $resultSet) {
-      SeekrUI::printCaseResult($resultSet);
+      SeekrUI::printCaseResult($resultSet, $showDetails);
     }
 
     foreach (static::$log['callbacks'] as $result) {
