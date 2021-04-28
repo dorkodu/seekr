@@ -39,6 +39,9 @@ final class Seekr
    */
   private static $repo = null;
 
+  /** @var array */
+  private static $settings = array();
+
   /**
    * Holds the TestResult logs.
    */
@@ -49,6 +52,9 @@ final class Seekr
 
   private static $successCount = 0;
   private static $failureCount = 0;
+
+  /** @var PerformanceProfiler $profiler */
+  private static PerformanceProfiler $profiler;
 
   public static function successCount()
   {
@@ -83,6 +89,8 @@ final class Seekr
 
     static::$successCount = 0;
     static::$failureCount = 0;
+
+    static::$profiler = new PerformanceProfiler(6, 2);
   }
 
   /**
@@ -145,28 +153,62 @@ final class Seekr
   /**
    * @internal 
    */
-  private static function isSetting($variable, $value)
+  private static function getSetting(string $setting, $default = null)
   {
-    return isset($variable)
-      && !empty($variable)
-      && $variable === $value;
+    if (
+      isset(static::$settings[$setting])
+      && !empty(static::$settings[$setting])
+    ) {
+      return static::$settings[$setting];
+    }
+
+    return $default;
+  }
+
+  public static function setupProfiler()
+  {
+    static::$profiler = new PerformanceProfiler(6, 1);
+    static::$profiler->start();
+  }
+
+  public static function resetProfiler()
+  {
+    if (
+      isset(static::$profiler)
+      && static::$profiler instanceof PerformanceProfiler
+    ) {
+      static::$profiler->stop();
+      static::$profiler->reset();
+    }
+  }
+
+  public static function getTotalPassedTime()
+  {
+    return static::$profiler->passedTime();
+  }
+
+  public static function getMemoryPeak()
+  {
+    return static::$profiler->memoryPeakUsage();
   }
 
   /**
    * Runs the tests.
    *
-   * @param array $setting You can give a few settings for Seekr.
-   * 'hideResults' -> set this to a boolean.
-   * 'detailedOutput' -> set this to a boolean.
+   * @param array $setting You can make a few choices on how should Seekr run your tests.\
+   * "hideResults" : Only will Boolean. Defaults to false.\
+   * "detailedOutput" : Will show details on each of your TestCase methods. Boolean, defaults to false.\
+   * "hideHeader" : Won't show Seekr brand header if set to true. Boolean, defaults to false.\
+   * 
    * @return void
    */
-  public static function run(array $setting = array())
+  public static function run(array $settings = array())
   {
     ob_start();
-    static::newRepositoryIfEmpty();
 
-    $performanceProfiler = new PerformanceProfiler(6, 2);
-    $performanceProfiler->start();
+    static::newRepositoryIfEmpty();
+    static::$settings = $settings;
+    static::setupProfiler();
 
     # run test cases
     foreach (static::$repo->testCases() as $test) {
@@ -178,10 +220,12 @@ final class Seekr
       self::handleTestFunction($test);
     }
 
-    SeekrUI::brand();
+    if (!static::getSetting('hideHeader', false)) {
+      SeekrUI::brand();
+    }
 
     # if user wants to see results
-    if (static::isSetting($setting['hideResults'], true)) {
+    if (!static::getSetting('hideResults', false)) {
       self::seeResults();
     }
 
@@ -249,7 +293,7 @@ final class Seekr
   /**
    * @return void
    */
-  public static function seeResults()
+  public static function seeResults(bool $showDetails = false)
   {
     foreach (static::$log['cases'] as $testCaseName => $resultSet) {
       SeekrUI::printCaseResult($resultSet);
@@ -267,7 +311,12 @@ final class Seekr
    */
   public static function summary()
   {
-    SeekrUI::summary(static::$successCount, static::$failureCount);
+    SeekrUI::summary(
+      static::$successCount,
+      static::$failureCount,
+      static::getTotalPassedTime(),
+      static::getMemoryPeak()
+    );
   }
 
   /**
@@ -279,7 +328,7 @@ final class Seekr
 
     /**
      * Performance profiling (time & memory) for test executions
-     * Precisions :
+     * Default Precisions :
      * 1/1.000.000 for time -- 1/100 for memory
      */
     $profiler = new PerformanceProfiler(6, 2);
