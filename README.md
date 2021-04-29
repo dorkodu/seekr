@@ -4,7 +4,7 @@
 
 ## What?
 
-Seekr is an awesome testing library for writing ***better*** tests ***easily*** and ***wisely*** on ***PHP***. <br>Seekr is independent from any ecosystem or framework. So anyone can use it in their code.
+Seekr is an awesome testing library for writing ***better*** tests ***easily*** and ***wisely*** on ***PHP***. <br>Seekr is independent from any framework. So anyone can use it.
 
 ## Why?
 
@@ -152,7 +152,7 @@ There are a few more advanced features of Seekr. <br>If you like it, you can tak
 
   - Each *TestCase*‘s passing state is determined by all of the test methods it contains.<br>
 
-  - When an exception occurs, your test is considered failing.<br>Seekr will show both exception message and output. <br>Also for every test Seekr tells the execution time in seconds and the peak memory usage.
+  - When an exception occurs, your test is considered *failing*.<br>Seekr will show both *exception message and output.* <br>Also for every test Seekr tells the execution time in seconds and the peak memory usage.
 
       #### Results on a dark-theme terminal :
 
