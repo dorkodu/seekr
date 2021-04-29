@@ -24,4 +24,6 @@ Seekr::testCase(new SampleTest());
 Seekr::testCase(new AnotherTest());
 
 # Run Seekr
-Seekr::run();
+Seekr::run([
+  'detailed' => 1
+]);
