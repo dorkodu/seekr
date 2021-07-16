@@ -2,12 +2,7 @@
 
 namespace Dorkodu\Seekr;
 
-use Exception;
-use ArrayAccess;
-use ReflectionClass;
-use SplObjectStorage;
 use Dorkodu\Utils\Str;
-use ReflectionException;
 
 use Dorkodu\Seekr\Constraint;
 
@@ -24,10 +19,6 @@ class Say
    * - ELSE everything goes fine, nothing special happens and this means the premise is true
    */
 
-  /**
-   * Check if this thing equals to your expectation.
-   */
-
   public static function count(int $expectedCount, $haystack)
   {
     $statement = Constraint::count($expectedCount, $haystack);
@@ -42,22 +33,14 @@ class Say
 
   public static function contains($needle, iterable $haystack)
   {
-    $statement =
-      (function ($needle, $haystack) {
-        if ($haystack instanceof SplObjectStorage) {
-          return $haystack->contains($needle);
-        }
-
-        foreach ($haystack as $element) {
-          if ($needle === $element) {
-            return true;
-          }
-        }
-
-        return false;
-      })($needle, $haystack);
-
+    $statement = Constraint::contains($needle, $haystack);
     Premise::propose($statement, "Not Contains", "SAY::CONTAINS");
+  }
+
+  public static function notContains($needle, iterable $haystack)
+  {
+    $statement = !Constraint::contains($needle, $haystack);
+    Premise::propose($statement, "Contains", "SAY::NON_CONTAINS");
   }
 
   public static function stringContains(string $needle, string $haystack)
@@ -184,6 +167,12 @@ class Say
     Premise::propose($statement, "Is Not Scalar", "SAY::SCALAR");
   }
 
+  public static function notScalar($thing)
+  {
+    $statement = !is_scalar($thing);
+    Premise::propose($statement, "Is Scalar", "SAY::NON_SCALAR");
+  }
+
   public static function NaN($thing)
   {
     $statement = is_nan($thing);
@@ -194,6 +183,12 @@ class Say
   {
     $statement = is_numeric($thing);
     Premise::propose($statement, "Is Not Numeric", "SAY::NUMERIC");
+  }
+
+  public static function notNumeric($thing)
+  {
+    $statement = !is_numeric($thing);
+    Premise::propose($statement, "Is Numeric", "SAY::NOT_NUMERIC");
   }
 
   public static function resource($thing)
@@ -227,25 +222,27 @@ class Say
     static::object($object);
 
     $statement = $object instanceof $className;
-    Premise::propose($statement, "Is Not Instance Of" . $className, "SAY::INSTANCE_OF");
+    Premise::propose($statement, "Is Not Instance Of " . $className, "SAY::INSTANCE_OF");
+  }
+
+  public static function notInstanceOf($object, $className)
+  {
+    static::object($object);
+
+    $statement = !($object instanceof $className);
+    Premise::propose($statement, "Is Instance Of " . $className, "SAY::NOT_INSTANCE_OF");
   }
 
   public static function hasProperty($object, string $propertyName)
   {
-    $statement =
-      (function ($o, $n) {
-        try {
-          return (new ReflectionClass($o))->hasProperty($n);
-        } catch (ReflectionException $e) {
-          throw new Exception(
-            $e->getMessage(),
-            (int) $e->getCode(),
-            $e
-          );
-        }
-      })($object, $propertyName);
-
+    $statement = Constraint::hasProperty($object, $propertyName);
     Premise::propose($statement, "Does Not Have Property", "SAY::HAS_PROPERTY");
+  }
+
+  public static function hasNotProperty($object, string $propertyName)
+  {
+    $statement = !Constraint::hasProperty($object, $propertyName);
+    Premise::propose($statement, "Has Property", "SAY::HAS_NOT_PROPERTY");
   }
 
   public static function hasMethod($object, string $propertyName)
@@ -256,8 +253,8 @@ class Say
 
   public static function hasNotMethod($object, string $propertyName)
   {
-    $statement = Constraint::hasMethod($object, $propertyName);
-    Premise::propose($statement, "Does Not Have Method", "SAY::HAS_METHOD");
+    $statement = !Constraint::hasMethod($object, $propertyName);
+    Premise::propose($statement, "Has Method", "SAY::HAS_NOT_METHOD");
   }
 
   public static function hasKey($haystack, $key)
@@ -271,17 +268,4 @@ class Say
     $statement = !Constraint::hasKey($haystack, $key);
     Premise::propose($statement, "Has Key", "SAY::HAS_NOT_KEY");
   }
-
-  /*
-
-  public static function ($)
-  {
-    $statement =
-      (function ($o, $n) {
-      })($haystack, $key);
-
-    Premise::propose($statement, "", "SAY::");
-  }
-
-  */
 }
