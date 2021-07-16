@@ -2,15 +2,16 @@
 
 namespace Dorkodu\Seekr;
 
+use Dorkodu\Utils\Str;
+
 use Countable;
 use Exception;
 use ArrayAccess;
 use ReflectionClass;
 use ReflectionObject;
 use SplObjectStorage;
-use Dorkodu\Utils\Str;
 use ReflectionException;
-use PHPUnit\Framework\Constraint\ClassHasStaticAttribute;
+use InvalidArgumentException;
 
 /**
  * Constraint class provides useful conditions for easy to use.
@@ -19,30 +20,15 @@ class Constraint
 {
   /**
    * RULE :
-   * - Take parameters and decide if they satisfy the requirements of the constraint
-   */
-
-  /**
-   * Check if this thing equals to your expectation.
+   * Take parameters and decide if they satisfy the requirements of the constraint.
    */
 
   public static function count(int $expectedCount, $haystack)
   {
     if (!$haystack instanceof Countable && !is_iterable($haystack)) {
-      throw InvalidArgumentException::create(2, 'countable or iterable');
+      throw new InvalidArgumentException(2, 'countable or iterable');
     }
 
-    if ($haystack instanceof Generator) {
-      (new WarningUtil)->createForTestCaseObjectOnCallStack(
-        'Passing an argument of type Generator for the $haystack parameter is deprecated. Support for this will be removed in PHPUnit 11.'
-      );
-    }
-
-    static::assertThat(
-      $haystack,
-      new Count($expectedCount),
-      $message
-    );
     return (count($haystack) === $expectedCount);
   }
 
@@ -239,7 +225,6 @@ class Constraint
     try {
       return (new ReflectionClass($object))->hasProperty($propertyName);
     } catch (ReflectionException $e) {
-
       throw new Exception(
         $e->getMessage(),
         (int) $e->getCode(),
@@ -291,32 +276,6 @@ class Constraint
     }
 
     return false;
-  }
-
-  public static function hasValue($haystack, $value)
-  {
-    return self::contains($value, $haystack);
-  }
-
-  public static function sameSize($expected, $actual)
-  {
-    if (!$expected instanceof Countable && !is_iterable($expected)) {
-      throw new Exception('Argument Is Not Countable or Iterable', 1);
-    }
-
-    if (!$actual instanceof Countable && !is_iterable($actual)) {
-      throw new Exception('Argument Is Not Countable or Iterable', 1);
-    }
-  }
-
-  public static function identicalTo($value): IsIdentical
-  {
-    return new IsIdentical($value);
-  }
-
-  public static function isInstanceOf(string $className): IsInstanceOf
-  {
-    return new IsInstanceOf($className);
   }
 
   private static function isValidObjectAttributeName(string $attributeName): bool
