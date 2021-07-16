@@ -27,7 +27,7 @@ use Exception;
  * @link       <https://github.com/dorkodu/seekr>
  * @license    The MIT License (MIT)
  */
-final class Seekr
+class Seekr
 {
 
   /** @var float $version */
