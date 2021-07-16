@@ -157,7 +157,7 @@ class SeekrUI
 
     $testMethodDetails = $detailedOutput ?
       sprintf(
-        "~ in %.6f seconds ~ %s",
+        "~ in %.6fs ~ %s",
         $testResult->getExecutionTime(),
         $testResult->getPeakMemoryUsage()
       )
@@ -209,15 +209,17 @@ class SeekrUI
 
     Console::breakLine();
 
-    Console::writeLine(sprintf(
-      "%s %s%s",
-      $resultBadge,
-      Color::colorize(
-        "dim",
-        empty($testCaseNamespace) ? "" : $testCaseNamespace . "\\"
-      ),
-      Color::colorize("bold", $testCaseClassName)
-    ));
+    Console::writeLine(
+      sprintf(
+        "%s %s%s",
+        $resultBadge,
+        Color::colorize(
+          "dim",
+          empty($testCaseNamespace) ? "" : $testCaseNamespace . "\\"
+        ),
+        Color::colorize("bold", $testCaseClassName)
+      )
+    );
 
     $totalTime = 0;
     $passedCount = 0;
