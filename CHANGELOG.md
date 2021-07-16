@@ -4,7 +4,9 @@
 
 ---
 
-- Seekr has a stable **`Say`** and **`Constraint`** helper classes which provide useful ready-to-go, shorthand *premises* (assertions) and *boolean statements* for you. <br>You can use them to simplify your code. We will continue adding useful premises.
+- Seekr has a stable **`Say`** and **`Constraint`** helper classes which provide useful ready-to-go, shorthand *premises* (assertions) and *boolean statements* for you.
+
+    You can use them to simplify your code. We will continue adding useful premises.
 
 ### 1.0.0 (April 23, 2021)
 
