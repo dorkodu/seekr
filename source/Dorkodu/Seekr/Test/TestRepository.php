@@ -25,12 +25,12 @@ final class TestRepository
    */
   private $_testFunctions = array();
 
-  public function addCase(TestCase $testCase)
+  public function case(TestCase $testCase)
   {
     array_push($this->_testCases, $testCase);
   }
 
-  public function addFunction(TestFunction $test)
+  public function function(TestFunction $test)
   {
     array_push($this->_testFunctions, $test);
   }
