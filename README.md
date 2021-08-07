@@ -1,4 +1,6 @@
-![Seekr Logo](assets/seekr-logo.png)
+<p align="center" style="text-align: center;">
+  <img src="assets/seekr-logo.png" alt="Seekr Logo" style="width: 80%; height: auto;" />
+</p>
 
 # Seekr
 
@@ -124,15 +126,9 @@ There are a few more advanced features of Seekr. <br>If you like it, you can tak
    */
   require "loot/loom-weaver.php";
   
-  # this is the test file
+  # these are the test files
   require_once "SampleTest.php";
   require_once "AnotherTest.php";
-  
-  /*
-   * We wrote functional tests to another file,
-   * to make managing tests easy.
-   */
-  require_once "function-tests.php";
   
   use Dorkodu\Seekr\Seekr;
   use SeekrTests\SampleTest;
@@ -144,16 +140,14 @@ There are a few more advanced features of Seekr. <br>If you like it, you can tak
   
   # Run Seekr
   Seekr::run();
-  
-  
   ```
-
+  
   Get the execution result in output, looks better if you use CLI.
-
+  
   - Each *TestCase*‘s passing state is determined by all of the test methods it contains.<br>
-
+  
   - When an exception occurs, your test is considered *failing*.<br>Seekr will show both *exception message and output.* <br>Also for every test Seekr tells the execution time in seconds and the peak memory usage.
-
+  
       #### Results on a dark-theme terminal :
 
   <img src="assets/sample-test-results-dark.jpg" style="border-radius: 1%">
@@ -174,7 +168,6 @@ There are some settings you can set while using Seekr.<br>We wanted to give you 
 
 ```php
 ...
-  
 /*
  * Give settings array to run method. Each is optional. 
  * Seekr works even if you don't set any of them.
@@ -185,14 +178,36 @@ Seekr::run([
 ]);
 ```
 
+### Custom Test Repository
+
+You can group your test cases and functions based on their domains/namespaces, by using `TestRepository`. Seekr has a default *TestRepository*, if you don’t
+
+```php
+<?php
+  
+$testRepository = new TestRepository();
+
+$testRepository->case(new SampleTest());
+$testRepository->function(new TestFunction("name", function() {}));
+
+# You can add a test case class by giving an instance of it.
+Seekr::testCase(new SampleTest());
+Seekr::testCase(new AnotherTest());
+
+# Run Seekr
+Seekr::run();
+```
+
 ### Hooks
 
-You can implement life cycle hooks to catch up with execution steps of tests :<br>These are current life cycle hooks for a test environment :
+You can use life cycle hooks to catch up with execution steps of tests.
 
-- `setUp()` :  Called *before* starting to run tests in a test class
-- `finish()` : Called *after all* tests in a test class have run
-- `mountedTest()` : Called *before each* test of this test class is run
-- `unmountedTest()` : Called *after each* test of this test class is run.
+These are current life cycle hooks for a test environment:
+
+- `setUp()` **:**  Called *before* starting to run tests in a test class
+- `finish()` **:** Called *after all* tests in a test class have run
+- `mountedTest()` **:** Called *before each* test of this test class is run
+- `unmountedTest()` **:** Called *after each* test of this test class is run.
 
 ```php
 class SampleTest extends TestCase 
@@ -210,7 +225,7 @@ class SampleTest extends TestCase
 
 ## Author
 
-Doruk Eray : [GitHub](https://github.com/dorukdorkodu)  | [Twitter](https://twitter.com/dorkodu) | [doruk@dorkodu.com](mailto:doruk@dorkodu.com) | [dorkodu.com](https://dorkodu.com)
+**Doruk Eray :** [GitHub](https://github.com/dorukeray)  | [Twitter](https://twitter.com/doruk4ever) | [doruk@dorkodu.com](mailto:doruk@dorkodu.com) | [doruk.dorkodu.com](https://dorkodu.com)
 
 See also the list of [contributions](https://libre.dorkodu.com) that we are making at [Dorkodu](https://dorkodu.com) to the free software community.
 
