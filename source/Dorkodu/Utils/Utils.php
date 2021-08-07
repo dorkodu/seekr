@@ -257,7 +257,6 @@ class Utils
     return $result;
   }
 
-
   /**
    * Group a list of objects by the result of some method, similar to how
    * GROUP BY works in an SQL query. This function simplifies grouping objects
@@ -316,7 +315,6 @@ class Utils
     return $groups;
   }
 
-
   /**
    * Group a list of arrays by the value of some index. This function is the same
    * as @{function:Utils::methodGroup}, except it operates on the values of array indexes
@@ -356,7 +354,6 @@ class Utils
     return $groups;
   }
 
-
   /**
    * Sort a list of objects by the return value of some method. In PHP, this is
    * often vastly more efficient than ##usort()## and similar.
@@ -389,7 +386,6 @@ class Utils
     return $result;
   }
 
-
   /**
    * Sort a list of arrays by the value of some index. This method is identical to
    * @{function:Utils::methodSort}, but operates on a list of arrays instead of a list of
@@ -413,7 +409,6 @@ class Utils
 
     return $result;
   }
-
 
   /**
    * Filter a list of objects by executing a method across all the objects and
@@ -462,7 +457,6 @@ class Utils
     return $result;
   }
 
-
   /**
    * Filter a list of arrays by removing the ones with an empty() value for some
    * index. This function works just like @{function:mfilter}, except that it
@@ -509,7 +503,6 @@ class Utils
     return $result;
   }
 
-
   /**
    * Selects a list of keys from an array, returning a new array with only the
    * key-value pairs identified by the selected keys, in the specified order.
@@ -535,7 +528,6 @@ class Utils
     }
     return $result;
   }
-
 
   /**
    * Checks if all values of array are instances of the passed class.
@@ -625,7 +617,6 @@ class Utils
     return null;
   }
 
-
   /**
    * Similar to @{function:coalesce}, but less strict: returns the first
    * non-##empty()## argument, instead of the first argument that is strictly
@@ -694,7 +685,6 @@ class Utils
       return $reflector->newInstance();
     }
   }
-
 
   /**
    * Returns the first element of an array. Exactly like reset(), but doesn't
@@ -815,7 +805,6 @@ class Utils
     return $lines;
   }
 
-
   /**
    * Simplifies a common use of `array_combine()`. Specifically, this:
    *
@@ -841,7 +830,6 @@ class Utils
     }
     return array();
   }
-
 
   /**
    * Add an element between every two elements of some array. That is, given a
@@ -931,7 +919,6 @@ class Utils
     return $result;
   }
 
-
   /**
    * Perform an `fwrite()` which distinguishes between EAGAIN and EPIPE.
    *
@@ -1017,7 +1004,6 @@ class Utils
     }
     return $result;
   }
-
 
   /**
    * Attempt to censor any plaintext credentials from a string.
