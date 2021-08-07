@@ -19,14 +19,13 @@
 - Changed the API.
 
 - **`REWRITE`**
-
   - Rewrote the whole library from scratch with what I learned through the journey.<br>I approached the concept from first principles.
   - Designed a better and cooler logo :)
-
+  
   - Simplified and decoupled some units.
   - Fixed inconsistencies
   - Removed some unnecessary internal code
-
+  
 - **`NEW`** You can add & run functional tests, by giving a description and a callback.
 
 - **`NEW`** Add `TestCase`, which your test classes can extend.
