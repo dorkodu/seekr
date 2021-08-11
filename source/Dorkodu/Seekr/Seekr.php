@@ -116,9 +116,7 @@ class Seekr
   public static function test(string $description, Closure $closure)
   {
     static::newRepositoryIfEmpty();
-
-    $test = new TestFunction($description, $closure);
-    static::$repo->function($test);
+    static::$repo->function($description, $closure);
   }
 
   /**
