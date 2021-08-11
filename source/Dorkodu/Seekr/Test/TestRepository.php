@@ -6,8 +6,6 @@ namespace Dorkodu\Seekr\Test;
 
 use Dorkodu\Seekr\Test\TestCase;
 use Dorkodu\Seekr\Test\TestFunction;
-use Dorkodu\Seekr\Exceptions\ShouldNotHappen;
-use Dorkodu\Seekr\Exceptions\TestAlreadyExist;
 
 final class TestRepository
 {
