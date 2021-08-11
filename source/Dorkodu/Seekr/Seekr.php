@@ -82,10 +82,10 @@ class Seekr
   {
     static::$repo = new TestRepository();
 
-    static::$log = array(
-      'callbacks' => array(),
-      'cases' => array()
-    );
+    static::$log = [
+      'callbacks' => [],
+      'cases' => []
+    ];
 
     static::$successCount = 0;
     static::$failureCount = 0;
@@ -125,7 +125,7 @@ class Seekr
    * @param TestRepository $testRepository
    * @return void
    */
-  public function setRepository(TestRepository $testRepository)
+  public static function setRepository(TestRepository $testRepository)
   {
     static::$repo = $testRepository;
   }
