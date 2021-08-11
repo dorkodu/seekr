@@ -101,7 +101,8 @@ class Seekr
   public static function testCase(TestCase $test)
   {
     static::newRepositoryIfEmpty();
-    static::$repo->addCase($test);
+
+    static::$repo->case($test);
   }
 
   /**
@@ -115,8 +116,9 @@ class Seekr
   public static function test(string $description, Closure $closure)
   {
     static::newRepositoryIfEmpty();
+
     $test = new TestFunction($description, $closure);
-    static::$repo->addFunction($test);
+    static::$repo->function($test);
   }
 
   /**
