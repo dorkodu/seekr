@@ -13,7 +13,7 @@ use ReflectionFunction;
 /**
  * Provides a loggable entity with information on a test and how it executed
  **/
-final class TestResult
+class TestResult
 {
   /**
    * @var boolean

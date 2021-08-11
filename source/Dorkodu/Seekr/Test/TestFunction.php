@@ -12,7 +12,7 @@ use ReflectionException;
 /**
  *  TestFuntion represents a single test closure
  */
-final class TestFunction
+class TestFunction
 {
   /**
    * Description/Name of the callback
