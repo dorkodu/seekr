@@ -101,7 +101,7 @@ class SeekrUI
       $testOutput = empty($testResult->getOutput())
         ? ""
         : sprintf(
-          "" . Color::colorize("bold, underlined, dim, fg-yellow", "Output") . "\n%s",
+          "" . Color::colorize("bold, underlined, fg-yellow", "Output") . "\n%s",
           $testResult->getOutput()
         );
 
